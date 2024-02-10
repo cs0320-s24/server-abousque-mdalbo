@@ -1,7 +1,8 @@
-package edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows;
+package edu.brown.cs.student.main.server.csv.parsing.examplecreatorfromrows;
 
-import edu.brown.cs.student.main.csv.parsing.CreatorFromRow;
-import edu.brown.cs.student.main.csv.parsing.FactoryFailureException;
+import edu.brown.cs.student.main.server.csv.parsing.CreatorFromRow;
+import edu.brown.cs.student.main.server.csv.parsing.FactoryFailureException;
+
 import java.util.List;
 
 /** A class for converting a CSV row into a StarSign instance. */

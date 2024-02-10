@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows;
+package edu.brown.cs.student.main.server.csv.parsing.examplecreatorfromrows;
 
 /** A class for representing people and their star signs. */
 public class StarSign {

@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import edu.brown.cs.student.main.csv.parsing.FactoryFailureException;
-import edu.brown.cs.student.main.csv.searching.Searcher;
+import edu.brown.cs.student.main.server.csv.parsing.FactoryFailureException;
+import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;

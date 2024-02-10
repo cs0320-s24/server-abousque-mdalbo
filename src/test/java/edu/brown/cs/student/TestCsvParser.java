@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import edu.brown.cs.student.main.csv.parsing.CsvParser;
-import edu.brown.cs.student.main.csv.parsing.FactoryFailureException;
-import edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows.StarSign;
-import edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows.StarSignRowConverter;
-import edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows.StringListRowConverter;
+import edu.brown.cs.student.main.server.csv.parsing.CsvParser;
+import edu.brown.cs.student.main.server.csv.parsing.FactoryFailureException;
+import edu.brown.cs.student.main.server.csv.parsing.examplecreatorfromrows.StarSign;
+import edu.brown.cs.student.main.server.csv.parsing.examplecreatorfromrows.StarSignRowConverter;
+import edu.brown.cs.student.main.server.csv.parsing.examplecreatorfromrows.StringListRowConverter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
