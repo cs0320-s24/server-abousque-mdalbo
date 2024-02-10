@@ -1,8 +1,8 @@
-package edu.brown.cs.student.main.searching;
+package edu.brown.cs.student.main.csv.searching;
 
-import edu.brown.cs.student.main.parsing.CsvParser;
-import edu.brown.cs.student.main.parsing.FactoryFailureException;
-import edu.brown.cs.student.main.parsing.examplecreatorfromrows.StringListRowConverter;
+import edu.brown.cs.student.main.csv.parsing.CsvParser;
+import edu.brown.cs.student.main.csv.parsing.FactoryFailureException;
+import edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows.StringListRowConverter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;

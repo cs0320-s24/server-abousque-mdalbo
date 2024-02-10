@@ -1,8 +1,8 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.csv;
 
-import edu.brown.cs.student.main.parsing.FactoryFailureException;
-import edu.brown.cs.student.main.parsing.examplecreatorfromrows.StringListRowConverter;
-import edu.brown.cs.student.main.searching.Searcher;
+import edu.brown.cs.student.main.csv.parsing.FactoryFailureException;
+import edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows.StringListRowConverter;
+import edu.brown.cs.student.main.csv.searching.Searcher;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

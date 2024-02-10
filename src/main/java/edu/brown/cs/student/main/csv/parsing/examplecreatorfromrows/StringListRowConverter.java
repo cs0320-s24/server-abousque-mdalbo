@@ -1,6 +1,6 @@
-package edu.brown.cs.student.main.parsing.examplecreatorfromrows;
+package edu.brown.cs.student.main.csv.parsing.examplecreatorfromrows;
 
-import edu.brown.cs.student.main.parsing.CreatorFromRow;
+import edu.brown.cs.student.main.csv.parsing.CreatorFromRow;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

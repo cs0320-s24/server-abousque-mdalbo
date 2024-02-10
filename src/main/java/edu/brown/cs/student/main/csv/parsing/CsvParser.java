@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main.parsing;
+package edu.brown.cs.student.main.csv.parsing;
 
 import java.io.BufferedReader;
 import java.io.IOException;
