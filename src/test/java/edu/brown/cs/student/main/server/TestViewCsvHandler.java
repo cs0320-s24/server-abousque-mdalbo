@@ -23,7 +23,8 @@ import spark.Spark;
 
 /** A class for unit testing of the functionality of the LoadCsvHandler class. */
 public class TestViewCsvHandler {
-
+  public LoadCsvHandler lh;
+  public ViewCsvHandler vh;
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
   private JsonAdapter<Map<String, Object>> adapter;
@@ -34,11 +35,11 @@ public class TestViewCsvHandler {
 
   @BeforeEach
   public void setup() {
+    this.lh = new LoadCsvHandler();
+    this.vh = new ViewCsvHandler();
     // Re-initialize parser, state, etc. for every test method
-    LoadCsvHandler lh = new LoadCsvHandler();
-    ViewCsvHandler vh = new ViewCsvHandler()''
-    Spark.get("/loadcsv", lh);
-    Spark.get("/viewcsv", new ViewCsvHandler());
+    Spark.get("/loadcsv", this.lh);
+    Spark.get("/viewcsv", this.vh);
     Spark.awaitInitialization();
 
     Moshi moshi = new Moshi.Builder().build();
