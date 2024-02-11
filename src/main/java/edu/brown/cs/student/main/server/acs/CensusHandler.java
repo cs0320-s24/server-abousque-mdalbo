@@ -36,7 +36,7 @@ public class CensusHandler implements Route {
     // link to get all state codes:https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
     System.out.println("getting here");
     String state = URLDecoder.decode(request.queryParams("state"), "UTF-8");
-    System.out.println("got state:" +state);
+    System.out.println("got state:" + state);
     String stateCode = this.stateToNums.get(state);
     System.out.println("got state");
     Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
@@ -85,7 +85,8 @@ public class CensusHandler implements Route {
 
   public String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
-    System.out.println("https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
+    System.out.println(
+        "https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
             + county
             + "&in=state:"
             + state);
