@@ -1,4 +1,4 @@
-package edu.brown.cs.student;
+package edu.brown.cs.student.main.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
