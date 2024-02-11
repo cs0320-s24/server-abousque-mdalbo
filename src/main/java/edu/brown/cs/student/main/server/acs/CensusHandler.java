@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CensusHandler implements Route {
-    CensusHandler(){
+    public CensusHandler(){
         Map<String,Object> stateToNums = null;
         try {
             stateToNums = queryStateNumbers();
