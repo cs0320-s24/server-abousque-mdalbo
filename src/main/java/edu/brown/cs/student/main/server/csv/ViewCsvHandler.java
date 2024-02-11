@@ -36,9 +36,20 @@ public class ViewCsvHandler extends CsvHandler implements Route {
       responseMap.put("result", "error_bad_json");
       responseMap.put("message", "Attempted to viewcsv before loading in a csv with loadcsv.");
     } else {
-      responseMap.put("data", csvContentsAdapter.toJson(CsvHandler.csvSearcher.getFullCsv()));
+      responseMap.put(
+          "data", postProcessJson(csvContentsAdapter.toJson(CsvHandler.csvSearcher.getFullCsv())));
       responseMap.put("result", "success");
     }
     return adapter.toJson(responseMap);
+  }
+
+  /**
+   * Cleans up json view of CSV by replacing any \" with a single ".
+   *
+   * @param original the String json that may contain \"
+   * @return original with any cases of \" replaced with a single "
+   */
+  private String postProcessJson(String original) {
+    return original.replaceAll("\\\"", "'");
   }
 }
