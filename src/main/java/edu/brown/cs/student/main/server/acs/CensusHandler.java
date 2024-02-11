@@ -53,6 +53,7 @@ public class CensusHandler implements Route {
   /**
    * The queryStateNumbers method is called in the CensusHandler constructor. It returns a map
    * between all the states and their corresponding numbers.
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -74,6 +75,7 @@ public class CensusHandler implements Route {
    * This method takes in the state number and then queries the census.gov api to get the codes of
    * the counties in that state. It returns a map of the county names to their corresponding
    * numbers.
+   *
    * @param state
    * @return
    * @throws URISyntaxException
@@ -96,9 +98,10 @@ public class CensusHandler implements Route {
   }
 
   /**
-   * This takes in the correct state and county numbers and then calls the census.gov api to get
-   * the broadband use. The response is then parsed using the deserializeBroadband method which
-   * returns a string with the percent of users who have internet.
+   * This takes in the correct state and county numbers and then calls the census.gov api to get the
+   * broadband use. The response is then parsed using the deserializeBroadband method which returns
+   * a string with the percent of users who have internet.
+   *
    * @param state
    * @param county
    * @return
@@ -106,7 +109,6 @@ public class CensusHandler implements Route {
    * @throws IOException
    * @throws InterruptedException
    */
-
   public String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
     System.out.println(
