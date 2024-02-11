@@ -13,6 +13,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/** A class to handle the loadcsv endpoint. */
 public class LoadCsvHandler extends CsvHandler implements Route {
 
   /**
@@ -31,9 +32,14 @@ public class LoadCsvHandler extends CsvHandler implements Route {
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
 
+    Map<String, Object> responseMap = new HashMap<>();
+    responseMap.put("endpoint", "loadcsv");
+
     try {
       filepath = request.queryParams("filepath");
+      responseMap.put("filepath", filepath);
       String headersIncludedString = request.queryParams("headersIncluded");
+      responseMap.put("headersIncluded", headersIncludedString);
       if (filepath == null | headersIncludedString == null) {
         throw new IllegalArgumentException(
             "Required argument " + filepath == null ? "filepath" : "headersIncluded" + " missing.");
@@ -46,19 +52,18 @@ public class LoadCsvHandler extends CsvHandler implements Route {
           .getMessage()
           .equals("Invalid CSV path. Please try again with a valid path from ./data/")) {
         // specific IllegalArgumentException stemming from nonexistent csv data source
-        return adapter.toJson(super.mapErrorDatasource(request, iaExn));
+        return adapter.toJson(super.mapErrorDatasource(responseMap, iaExn));
       } else {
         // rest of IllegalArgumentExceptions thrown are due to a bad request
-        return adapter.toJson(super.mapBadRequestError(request, iaExn));
+        return adapter.toJson(super.mapBadRequestError(responseMap, iaExn));
       }
     } catch (IOException | FactoryFailureException exn) {
       // occurs when csv can be found but can't be parsed -> bad request
-      return adapter.toJson(super.mapErrorDatasource(request, exn));
+      return adapter.toJson(super.mapErrorDatasource(responseMap, exn));
     }
 
-    Map<String, Object> successResponseMap = new HashMap<>();
-    successResponseMap.put("request", "/loadcsv?" + request.queryString());
-    successResponseMap.put("result", "success");
-    return adapter.toJson(successResponseMap);
+    // success
+    responseMap.put("result", "success");
+    return adapter.toJson(responseMap);
   }
 }
