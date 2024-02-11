@@ -15,7 +15,7 @@ public class CachedAcsAPI implements AcsDatasource {
      * @param county the County of interest in state
      * @return a response Map describing the results of this query
      */
-    public Map<String, Object> queryBroadband(String state, String county) {
+    public Map<String, Object> queryBroadband(String stateCode, String countyCode, String state, String county) {
         // TODO: implement
         return new HashMap<String, Object>();
     }

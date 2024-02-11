@@ -49,6 +49,7 @@ public class TestViewCsvHandler {
 
   @AfterEach
   public void tearDown() {
+    Spark.unmap("/loadcsv");
     Spark.unmap("/viewcsv");
     Spark.awaitStop();
   }

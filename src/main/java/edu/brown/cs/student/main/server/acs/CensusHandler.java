@@ -17,11 +17,12 @@ import spark.Route;
 
 public class CensusHandler implements Route {
   private Map<String, String> stateToNums;
+  private AcsDatasource datasource;
 
   public CensusHandler() {
-    this.stateToNums = null;
+    this.datasource = new CensusAPI();
     try {
-      this.stateToNums = queryStateNumbers();
+      this.stateToNums = this.queryStateNumbers();
     } catch (IOException e) {
       System.out.println("boooo");
     } catch (URISyntaxException e) {
@@ -39,14 +40,7 @@ public class CensusHandler implements Route {
     Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
     String county = request.queryParams("county");
     String countyCode = countyToInt.get(county + ", " + state);
-    String broadbandUse = queryCountyStats(stateCode, countyCode);
-    Map<String, Object> responseMap = new HashMap<>();
-    responseMap.put("State", state);
-    responseMap.put("County", county);
-    responseMap.put("Broadband Usage", broadbandUse);
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-    LocalDateTime now = LocalDateTime.now();
-    responseMap.put("date accessed", dtf.format(now));
+    Map<String,Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode,state,county);
     return responseMap;
   }
 
@@ -93,39 +87,5 @@ public class CensusHandler implements Route {
     HttpResponse<String> countyNumsResponse =
         HttpClient.newBuilder().build().send(getCountyNums, HttpResponse.BodyHandlers.ofString());
     return CensusAPIUtilities.deserializeCounties(countyNumsResponse.body());
-  }
-
-  /**
-   * This takes in the correct state and county numbers and then calls the census.gov api to get
-   * the broadband use. The response is then parsed using the deserializeBroadband method which
-   * returns a string with the percent of users who have internet.
-   * @param state
-   * @param county
-   * @return
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws InterruptedException
-   */
-
-  public String queryCountyStats(String state, String county)
-      throws URISyntaxException, IOException, InterruptedException {
-    System.out.println(
-        "https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
-            + county
-            + "&in=state:"
-            + state);
-    HttpRequest getCountyInfo =
-        HttpRequest.newBuilder()
-            .uri(
-                new URI(
-                    "https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
-                        + county
-                        + "&in=state:"
-                        + state))
-            .GET()
-            .build();
-    HttpResponse<String> countyInfoResponse =
-        HttpClient.newBuilder().build().send(getCountyInfo, HttpResponse.BodyHandlers.ofString());
-    return CensusAPIUtilities.deserializeBroadband(countyInfoResponse.body());
   }
 }
