@@ -1,9 +1,7 @@
 package edu.brown.cs.student.main.server.csv;
 
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
-import java.util.HashMap;
 import java.util.Map;
-import spark.Request;
 
 public abstract class CsvHandler {
   protected static Searcher csvSearcher;
@@ -27,30 +25,26 @@ public abstract class CsvHandler {
   }
 
   /**
-   * Creates a Map from labels to details for describing an error due to a bad request.
+   * Adds error information for a bad request to response map.
    *
-   * @param request the Request that caused the exception
+   * @param response the response Map to add error information to
    * @param exn the Exception to report back to API caller
    * @return a Map describing the error
    */
-  protected Map<String, Object> mapBadRequestError(Request request, Exception exn) {
-    Map<String, Object> response = new HashMap<>();
-    response.put("request", "/loadcsv?" + request.queryString());
+  protected Map<String, Object> mapBadRequestError(Map<String, Object> response, Exception exn) {
     response.put("result", "error_bad_request");
     response.put("message", exn.getMessage());
     return response;
   }
 
   /**
-   * Creates a Map from labels to details for describing an error due to an invalid data source.
+   * Adds error information for an invalid data source to response map.
    *
-   * @param request the Request that caused the exception
+   * @param response the response Map to add error information to
    * @param exn the Exception to report back to API caller
    * @return a Map describing the error
    */
-  protected Map<String, Object> mapErrorDatasource(Request request, Exception exn) {
-    Map<String, Object> response = new HashMap<>();
-    response.put("request", "/loadcsv?" + request.queryString());
+  protected Map<String, Object> mapErrorDatasource(Map<String, Object> response, Exception exn) {
     response.put("result", "error_datasource");
     response.put("message", exn.getMessage());
     return response;
