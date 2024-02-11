@@ -22,6 +22,8 @@ public class Server {
 
     Spark.get("/broadband", new CensusHandler());
 
+    // TODO: add static Searcher here, change handlers to take this object
+
     // /loadcsv?filepath=String&headersIncluded=boolean
     // somehow add instructions that filepath should be path from data folder?
     Spark.get("/loadcsv", new LoadCsvHandler());
