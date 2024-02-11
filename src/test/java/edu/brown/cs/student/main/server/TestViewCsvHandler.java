@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
+import edu.brown.cs.student.main.server.csv.CsvHandler;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
 import edu.brown.cs.student.main.server.csv.ViewCsvHandler;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import javax.swing.text.View;
 import okio.Buffer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +23,8 @@ import spark.Spark;
 
 /** A class for unit testing of the functionality of the LoadCsvHandler class. */
 public class TestViewCsvHandler {
-
+  public LoadCsvHandler lh;
+  public ViewCsvHandler vh;
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
   private JsonAdapter<Map<String, Object>> adapter;
@@ -32,9 +35,11 @@ public class TestViewCsvHandler {
 
   @BeforeEach
   public void setup() {
+    this.lh = new LoadCsvHandler();
+    this.vh = new ViewCsvHandler();
     // Re-initialize parser, state, etc. for every test method
-    Spark.get("/loadcsv", new LoadCsvHandler());
-    Spark.get("/viewcsv", new ViewCsvHandler());
+    Spark.get("/loadcsv", this.lh);
+    Spark.get("/viewcsv", this.vh);
     Spark.awaitInitialization();
 
     Moshi moshi = new Moshi.Builder().build();
