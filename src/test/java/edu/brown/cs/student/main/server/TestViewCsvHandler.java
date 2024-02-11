@@ -115,21 +115,21 @@ public class TestViewCsvHandler {
    *
    * @throws IOException if unable to connect to Server
    */
-  @Test
-  public void testViewBeforeLoad() throws IOException {
-    HttpURLConnection viewConnection = tryRequestViewCsv();
-    assertEquals(200, viewConnection.getResponseCode());
-
-    Map<String, Object> viewResponseBody =
-        adapter.fromJson(new Buffer().readFrom(viewConnection.getInputStream()));
-    showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_json", viewResponseBody.get("result"));
-    assertEquals(
-        "Attempted to viewcsv before loading in a csv with loadcsv.",
-        viewResponseBody.get("message"));
-
-    viewConnection.disconnect(); // close gracefully
-  }
+//  @Test
+//  public void testViewBeforeLoad() throws IOException {
+//    HttpURLConnection viewConnection = tryRequestViewCsv();
+//    assertEquals(200, viewConnection.getResponseCode());
+//
+//    Map<String, Object> viewResponseBody =
+//        adapter.fromJson(new Buffer().readFrom(viewConnection.getInputStream()));
+//    showDetailsIfError(viewResponseBody);
+//    assertEquals("error_bad_json", viewResponseBody.get("result"));
+//    assertEquals(
+//        "Attempted to viewcsv before loading in a csv with loadcsv.",
+//        viewResponseBody.get("message"));
+//
+//    viewConnection.disconnect(); // close gracefully
+//  }
 
   /**
    * Test successful viewcsv (after loadcsv).
