@@ -19,7 +19,6 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
 
-    // commenting this out temporarily so I can test the loadcsv handler -Abby
     Spark.get("/broadband", new CensusHandler());
 
     // /loadcsv?filepath=String&headersIncluded=boolean
