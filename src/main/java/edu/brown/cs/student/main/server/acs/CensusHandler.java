@@ -14,7 +14,7 @@ import spark.Route;
 
 public class CensusHandler implements Route {
   public CensusHandler() {
-    Map<String, Object> stateToNums = null;
+    Map<String, Integer> stateToNums = null;
     try {
       stateToNums = queryStateNumbers();
     } catch (IOException e) {
@@ -36,7 +36,7 @@ public class CensusHandler implements Route {
     return null;
   }
 
-  public Map<String, Object> queryStateNumbers()
+  public Map<String, Integer> queryStateNumbers()
       throws URISyntaxException, IOException, InterruptedException {
     HttpRequest getStateNums =
         HttpRequest.newBuilder()

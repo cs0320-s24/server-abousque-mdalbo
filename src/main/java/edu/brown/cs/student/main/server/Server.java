@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.server.acs.CensusHandler;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
 import spark.Spark;
 
@@ -19,7 +20,7 @@ public class Server {
         });
 
     // commenting this out temporarily so I can test the loadcsv handler -Abby
-    //    Spark.get("/broadband", new CensusHandler());
+    Spark.get("/broadband", new CensusHandler());
 
     // /loadcsv?filepath=String&headersIncluded=boolean
     // somehow add instructions that filepath should be path from data folder?
