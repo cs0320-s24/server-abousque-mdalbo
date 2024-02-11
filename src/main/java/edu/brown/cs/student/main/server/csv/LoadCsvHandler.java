@@ -1,7 +1,13 @@
 package edu.brown.cs.student.main.server.csv;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.server.csv.parsing.FactoryFailureException;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -9,43 +15,52 @@ import spark.Route;
 import java.io.IOException;
 
 public class LoadCsvHandler extends CsvHandler implements Route {
-    private Searcher csvSearcher;
 
     /**
      * Constructor for LoadCsvHandler class
-     *
-     * Doesn't need to do anything? Not sure how to return errors from here w/o throwing...
      */
     public LoadCsvHandler() {
+        // TODO: clean up (is this needed?)
+        // could call super() constructor but super doesn't have one anyway so maybe this is unnecessary
     }
 
-    /*
-    "error_bad_json" if the request was ill-formed;
-    "error_bad_request" if the request was missing a needed field, or the field was ill-formed; and
-    "error_datasource" if the given data source wasn't accessible (e.g., the file didn't exist or the ACS API returned an error for a given location).
+    /**
+     * Interprets and executes user request.
+     *
+     * @param request the Request of the user
+     * @param response the Response to the request // TODO ???? unused?
+     * @return a serialized json describing the results of executing request
      */
-
-
     @Override
     public Object handle(Request request, Response response) {
         String filepath;
         boolean headersIncluded;
+
+        Moshi moshi = new Moshi.Builder().build();
+        Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
+        JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
+
         try {
             filepath = request.queryParams("filepath");
             headersIncluded = super.parseBoolean(request.queryParams("headersIncluded"));
-            this.csvSearcher = new Searcher(filepath, headersIncluded);
+            super.csvSearcher = new Searcher(filepath, headersIncluded);
         } catch (IllegalArgumentException iaExn) {
             if (iaExn.getMessage().equals("Invalid CSV path. Please try again with a valid path from ./data/")) {
-                return super.sterilizeErrorDatasource(request, iaExn);
+                // specific IllegalArgumentException stemming from nonexistent csv data source
+                return adapter.toJson(super.mapErrorDatasource(request, iaExn));
             } else {
-                return super.sterilizeBadRequestError(request, iaExn);
+                // rest of IllegalArgumentExceptions thrown are due to a bad request
+                return adapter.toJson(super.mapBadRequestError(request, iaExn));
             }
         } catch (IOException | FactoryFailureException exn) {
-            return super.sterilizeErrorDatasource(request, exn);
+            // occurs when csv can be found but can't be parsed -> bad request
+            return adapter.toJson(super.mapErrorDatasource(request, exn));
         }
 
-        // TODO return actual json
-        return new Object();
+        Map<String, Object> successResponseMap = new HashMap<>();
+        successResponseMap.put("request", request.body());
+        successResponseMap.put("result", "success");
+        return adapter.toJson(successResponseMap);
     }
 
 }
