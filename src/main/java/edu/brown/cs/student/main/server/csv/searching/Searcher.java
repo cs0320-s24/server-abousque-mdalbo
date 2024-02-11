@@ -14,6 +14,7 @@ import java.util.List;
 public class Searcher {
 
   private HashMap<String, Integer> columnHeaderToIndex = null;
+  private final List<List<String>> fullCsvContents;
   private final List<List<String>> csvContents;
   private final int numCols;
 
@@ -31,16 +32,21 @@ public class Searcher {
   public Searcher(String pathFromData, boolean headersIncluded)
       throws IllegalArgumentException, IOException, FactoryFailureException {
     CsvParser<List<String>> csvParser = generateCsvParser(pathFromData);
-    this.csvContents = csvParser.parse();
-    if (this.csvContents.isEmpty()) {
+    this.fullCsvContents = csvParser.parse();
+    if (this.fullCsvContents.isEmpty()) {
       throw new IllegalArgumentException("User provided empty file.");
     }
-    this.numCols = this.csvContents.get(0).size();
+    this.numCols = this.fullCsvContents.get(0).size();
     this.checkConsistentRows();
 
     if (headersIncluded) {
-      this.columnHeaderToIndex = extractHeaders(this.csvContents.get(0));
+      this.columnHeaderToIndex = extractHeaders(this.fullCsvContents.get(0));
+      this.csvContents = new ArrayList<>();
+      this.csvContents.addAll(fullCsvContents);
       this.csvContents.remove(0); // header row is not part of the CSV contents
+    } else {
+      // fullCsvContents and csvContents should point to the same list
+      this.csvContents = this.fullCsvContents;
     }
   }
 
@@ -81,7 +87,7 @@ public class Searcher {
    *     row of the CSV
    */
   public void checkConsistentRows() throws IllegalArgumentException {
-    for (List<String> row : this.csvContents) {
+    for (List<String> row : this.fullCsvContents) {
       if (row.size() != this.numCols) {
         throw new IllegalArgumentException(
             "Encountered a row with length inconsistent to first row of CSV: " + row);
@@ -90,7 +96,7 @@ public class Searcher {
   }
 
   /**
-   * Extracts the CSV contents. Exists solely for the purpose of unit testing.
+   * Extracts the CSV contents.
    *
    * @return the csv contents associated with this Searcher
    */
@@ -99,7 +105,18 @@ public class Searcher {
   }
 
   /**
-   * Extracts the mapping of column names to indices. Exists solely for the purpose of unit testing.
+   * Extracts the full CSV contents (including header).
+   *
+   * <p>In the case where the csv doesn't have a header, this is the exact same as getCsvContents.
+   *
+   * @return the full csv contents associated with this Searcher
+   */
+  public List<List<String>> getFullCsv() {
+    return this.fullCsvContents;
+  }
+
+  /**
+   * Extracts the mapping of column names to indices.
    *
    * @return the HashMap of column names to their indices
    */
