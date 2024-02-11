@@ -4,6 +4,7 @@ import static spark.Spark.after;
 
 import edu.brown.cs.student.main.server.acs.CensusHandler;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
+import edu.brown.cs.student.main.server.csv.ViewCsvHandler;
 import spark.Spark;
 
 public class Server {
@@ -24,6 +25,8 @@ public class Server {
     // /loadcsv?filepath=String&headersIncluded=boolean
     // somehow add instructions that filepath should be path from data folder?
     Spark.get("/loadcsv", new LoadCsvHandler());
+
+    Spark.get("/viewcsv", new ViewCsvHandler());
 
     Spark.awaitInitialization();
   }
