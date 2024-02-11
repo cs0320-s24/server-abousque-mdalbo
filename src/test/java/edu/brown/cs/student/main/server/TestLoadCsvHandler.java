@@ -40,21 +40,20 @@ public class TestLoadCsvHandler {
   }
 
   /**
-   * Helper to start a connection to a specific API endpoint/params.
+   * Helper to start a connection to the loadcsv endpoint.
    *
    * <p>Adapted from February 8, 2024 cs32 livecode.
    *
    * <p>The "throws" clause doesn't matter below -- JUnit will fail if an exception is thrown that
    * hasn't been declared as a parameter to @Test.
    *
-   * @param endpoint the endpoint to send a request to
    * @param args the arguments to pass to the endpoint, following a "?"
    * @return the connection for the given URL, just after connecting
    * @throws IOException if the connection fails for some reason
    */
-  private HttpURLConnection tryRequest(String endpoint, String args) throws IOException {
+  private HttpURLConnection tryRequestLoadCsv(String args) throws IOException {
     // Configure the connection (but don't actually send a request yet)
-    URL requestURL = new URL("http://localhost:" + Spark.port() + "/" + endpoint + "?" + args);
+    URL requestURL = new URL("http://localhost:" + Spark.port() + "/loadcsv?" + args);
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     // The request body contains a Json object
     clientConnection.setRequestProperty("Content-Type", "application/json");
@@ -70,11 +69,11 @@ public class TestLoadCsvHandler {
    *
    * <p>Adapted from February 8, 2024 cs32 livecode.
    *
-   * @param body
+   * @param body the body of the json response
    */
   private void showDetailsIfError(Map<String, Object> body) {
     if (body.containsKey("type") && "error".equals(body.get("type"))) {
-      System.out.println(body.toString());
+      System.out.println(body);
     }
   }
 
@@ -86,7 +85,7 @@ public class TestLoadCsvHandler {
   @Test
   public void testNoArgs() throws IOException {
     // no args
-    HttpURLConnection connection = tryRequest("loadcsv", "");
+    HttpURLConnection connection = tryRequestLoadCsv("");
     assertEquals(200, connection.getResponseCode());
 
     Map<String, Object> responseBody =
@@ -96,7 +95,7 @@ public class TestLoadCsvHandler {
     connection.disconnect(); // close gracefully
 
     // filepath only, missing headersIncluded
-    connection = tryRequest("loadcsv", "filepath=RI_City_Town.csv");
+    connection = tryRequestLoadCsv("filepath=RI_City_Town.csv");
     assertEquals(200, connection.getResponseCode());
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
@@ -105,7 +104,7 @@ public class TestLoadCsvHandler {
     connection.disconnect(); // close gracefully
 
     // headersIncluded only, missing filepath
-    connection = tryRequest("loadcsv", "headersIncluded=false");
+    connection = tryRequestLoadCsv("headersIncluded=false");
     assertEquals(200, connection.getResponseCode());
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
@@ -123,7 +122,7 @@ public class TestLoadCsvHandler {
   public void testBadFilepath() throws IOException {
     // nonexistent file
     HttpURLConnection connection =
-        tryRequest("loadcsv", "filepath=nonexistent.csv&headersIncluded=true");
+        tryRequestLoadCsv("filepath=nonexistent.csv&headersIncluded=true");
     assertEquals(200, connection.getResponseCode());
 
     Map<String, Object> responseBody =
@@ -133,7 +132,7 @@ public class TestLoadCsvHandler {
     connection.disconnect(); // close gracefully
 
     // file out of scope
-    connection = tryRequest("loadcsv", "filepath=../out_of_scope.csv&headersIncluded=true");
+    connection = tryRequestLoadCsv("filepath=../out_of_scope.csv&headersIncluded=true");
     assertEquals(200, connection.getResponseCode());
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
@@ -152,7 +151,7 @@ public class TestLoadCsvHandler {
   public void testBadFileContents() throws IOException {
     // file with inconsistent row lengths
     HttpURLConnection connection =
-        tryRequest("loadcsv", "filepath=inconsistent_row_lengths.csv&headersIncluded=false");
+        tryRequestLoadCsv("filepath=inconsistent_row_lengths.csv&headersIncluded=false");
     assertEquals(200, connection.getResponseCode());
 
     Map<String, Object> responseBody =
@@ -162,7 +161,7 @@ public class TestLoadCsvHandler {
     connection.disconnect(); // close gracefully
 
     // empty file
-    connection = tryRequest("loadcsv", "filepath=empty.csv&headersIncluded=true");
+    connection = tryRequestLoadCsv("filepath=empty.csv&headersIncluded=true");
     assertEquals(200, connection.getResponseCode());
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
@@ -179,7 +178,7 @@ public class TestLoadCsvHandler {
   @Test
   public void testSuccess() throws IOException {
     HttpURLConnection connection =
-        tryRequest("loadcsv", "filepath=RI_City_Town.csv&headersIncluded=true");
+        tryRequestLoadCsv("filepath=RI_City_Town.csv&headersIncluded=true");
     assertEquals(200, connection.getResponseCode());
 
     Map<String, Object> responseBody =
