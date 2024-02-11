@@ -488,4 +488,30 @@ public class TestSearcher {
     assertThrows(
         IllegalArgumentException.class, () -> new Searcher("inconsistent_row_lengths.csv", false));
   }
+
+  /** Test getFullCsv. */
+  @Test
+  public void testCsvContentsGetters() {
+    Searcher censusSearcher = null;
+    try {
+      censusSearcher = new Searcher("census/postsecondary_education.csv", true);
+    } catch (IOException | IllegalArgumentException | FactoryFailureException ffExn) {
+      fail();
+    }
+    List<List<String>> fullContents = censusSearcher.getFullCsv();
+    List<String> firstRow =
+        List.of(
+            "Asian",
+            "2020",
+            "2020",
+            "217156",
+            "Brown University",
+            "214",
+            "brown-university",
+            "0.069233258",
+            "Men",
+            "1");
+    assertEquals(this.postSecondaryEduColumns, fullContents.get(0));
+    assertEquals(firstRow, fullContents.get(1));
+  }
 }
