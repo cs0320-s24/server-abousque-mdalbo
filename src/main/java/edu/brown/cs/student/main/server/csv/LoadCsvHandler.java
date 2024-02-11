@@ -15,17 +15,11 @@ import spark.Route;
 
 public class LoadCsvHandler extends CsvHandler implements Route {
 
-  /** Constructor for LoadCsvHandler class */
-  public LoadCsvHandler() {
-    // TODO: clean up (is this needed?)
-    // could call super() constructor but super doesn't have one anyway so maybe this is unnecessary
-  }
-
   /**
    * Interprets and executes user request.
    *
    * @param request the Request of the user
-   * @param response the Response to the request // TODO ???? unused?
+   * @param response the Response to the request // TODO ???? unused? but also unused in livecode
    * @return a serialized json describing the results of executing request
    */
   @Override
