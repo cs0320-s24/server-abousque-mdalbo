@@ -34,17 +34,11 @@ public class CensusHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     // link to get all state codes:https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
-    System.out.println("getting here");
     String state = URLDecoder.decode(request.queryParams("state"), "UTF-8");
-    System.out.println("got state:" + state);
     String stateCode = this.stateToNums.get(state);
-    System.out.println("got state");
     Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
-    System.out.println("got county to int map");
     String county = request.queryParams("county");
-    System.out.println(county);
     String countyCode = countyToInt.get(county + ", " + state);
-    System.out.println(countyCode);
     String broadbandUse = queryCountyStats(stateCode, countyCode);
     Map<String, Object> responseMap = new HashMap<>();
     responseMap.put("State", state);
@@ -56,6 +50,14 @@ public class CensusHandler implements Route {
     return responseMap;
   }
 
+  /**
+   * The queryStateNumbers method is called in the CensusHandler constructor. It returns a map
+   * between all the states and their corresponding numbers.
+   * @return
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public Map<String, String> queryStateNumbers()
       throws URISyntaxException, IOException, InterruptedException {
     HttpRequest getStateNums =
@@ -68,6 +70,16 @@ public class CensusHandler implements Route {
     return CensusAPIUtilities.deserializeStates(stateNumsResponse.body());
   }
 
+  /**
+   * This method takes in the state number and then queries the census.gov api to get the codes of
+   * the counties in that state. It returns a map of the county names to their corresponding
+   * numbers.
+   * @param state
+   * @return
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public Map<String, String> queryCountyNumbers(String state)
       throws URISyntaxException, IOException, InterruptedException {
     HttpRequest getCountyNums =
@@ -82,6 +94,18 @@ public class CensusHandler implements Route {
         HttpClient.newBuilder().build().send(getCountyNums, HttpResponse.BodyHandlers.ofString());
     return CensusAPIUtilities.deserializeCounties(countyNumsResponse.body());
   }
+
+  /**
+   * This takes in the correct state and county numbers and then calls the census.gov api to get
+   * the broadband use. The response is then parsed using the deserializeBroadband method which
+   * returns a string with the percent of users who have internet.
+   * @param state
+   * @param county
+   * @return
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
 
   public String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
