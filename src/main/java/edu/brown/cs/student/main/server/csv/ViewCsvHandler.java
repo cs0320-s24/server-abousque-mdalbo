@@ -1,13 +1,12 @@
 package edu.brown.cs.student.main.server.csv;
 
-import edu.brown.cs.student.main.server.csv.CsvHandler;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class ViewCsvHandler extends CsvHandler implements Route {
-    @Override
-    public Object handle(Request request, Response response) throws Exception {
-        return null;
-    }
+  @Override
+  public Object handle(Request request, Response response) throws Exception {
+    return null;
+  }
 }
