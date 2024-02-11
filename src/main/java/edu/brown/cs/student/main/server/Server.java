@@ -1,5 +1,6 @@
 package edu.brown.cs.student.main.server;
 
+import edu.brown.cs.student.main.server.acs.CensusHandler;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import spark.Spark;
 
