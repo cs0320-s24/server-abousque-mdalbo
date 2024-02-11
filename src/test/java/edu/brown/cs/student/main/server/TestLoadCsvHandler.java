@@ -92,6 +92,9 @@ public class TestLoadCsvHandler {
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals(null, responseBody.get("filepath"));
+    assertEquals(null, responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
 
     // filepath only, missing headersIncluded
@@ -101,6 +104,9 @@ public class TestLoadCsvHandler {
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("RI_City_Town.csv", responseBody.get("filepath"));
+    assertEquals(null, responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
 
     // headersIncluded only, missing filepath
@@ -110,6 +116,9 @@ public class TestLoadCsvHandler {
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals(null, responseBody.get("filepath"));
+    assertEquals("false", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
   }
 
@@ -129,6 +138,9 @@ public class TestLoadCsvHandler {
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_datasource", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("nonexistent.csv", responseBody.get("filepath"));
+    assertEquals("true", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
 
     // file out of scope
@@ -138,6 +150,9 @@ public class TestLoadCsvHandler {
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("../out_of_scope.csv", responseBody.get("filepath"));
+    assertEquals("true", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
   }
 
@@ -158,6 +173,9 @@ public class TestLoadCsvHandler {
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("inconsistent_row_lengths.csv", responseBody.get("filepath"));
+    assertEquals("false", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
 
     // empty file
@@ -167,6 +185,9 @@ public class TestLoadCsvHandler {
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("empty.csv", responseBody.get("filepath"));
+    assertEquals("true", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
   }
 
@@ -185,6 +206,9 @@ public class TestLoadCsvHandler {
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("success", responseBody.get("result"));
+    assertEquals("loadcsv", responseBody.get("endpoint"));
+    assertEquals("RI_City_Town.csv", responseBody.get("filepath"));
+    assertEquals("true", responseBody.get("headersIncluded"));
     connection.disconnect(); // close gracefully
   }
 }
