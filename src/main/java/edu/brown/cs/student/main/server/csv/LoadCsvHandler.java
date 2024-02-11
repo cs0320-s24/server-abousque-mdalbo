@@ -57,7 +57,7 @@ public class LoadCsvHandler extends CsvHandler implements Route {
     }
 
     Map<String, Object> successResponseMap = new HashMap<>();
-    successResponseMap.put("request", request.queryString());
+    successResponseMap.put("request", "/loadcsv?" + request.queryString());
     successResponseMap.put("result", "success");
     return adapter.toJson(successResponseMap);
   }

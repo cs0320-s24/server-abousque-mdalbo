@@ -35,7 +35,7 @@ public abstract class CsvHandler {
    */
   protected Map<String, Object> mapBadRequestError(Request request, Exception exn) {
     Map<String, Object> response = new HashMap<>();
-    response.put("request", request.queryString());
+    response.put("request", "/loadcsv?" + request.queryString());
     response.put("result", "error_bad_request");
     response.put("message", exn.getMessage());
     return response;
@@ -50,7 +50,7 @@ public abstract class CsvHandler {
    */
   protected Map<String, Object> mapErrorDatasource(Request request, Exception exn) {
     Map<String, Object> response = new HashMap<>();
-    response.put("request", request.queryString());
+    response.put("request", "/loadcsv?" + request.queryString());
     response.put("result", "error_datasource");
     response.put("message", exn.getMessage());
     return response;
