@@ -48,7 +48,8 @@ public class SearchCsvHandler extends CsvHandler implements Route {
 
     if (!this.csvSearcher.isInitialized()) {
       responseMap.put("result", "error_bad_json");
-      responseMap.put("message", "Attempted to searchcsv before loading in a csv with loadcsv.");
+      responseMap.put(
+          "error message", "Attempted to searchcsv before loading in a csv with loadcsv.");
     } else {
       target = request.queryParams("target");
       responseMap.put("target", target);
