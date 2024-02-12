@@ -31,7 +31,7 @@ public class LoadCsvHandler extends CsvHandler implements Route {
    * Interprets and executes user request.
    *
    * @param request the Request of the user
-   * @param response the Response to the request // TODO ???? unused? but also unused in livecode
+   * @param response the Response to the request, unused in this implementation
    * @return a serialized json describing the results of executing request
    */
   @Override
@@ -55,8 +55,7 @@ public class LoadCsvHandler extends CsvHandler implements Route {
         throw new IllegalArgumentException("Required argument headersIncluded is missing.");
       }
       headersIncluded = super.parseBoolean(headersIncludedString);
-
-      this.csvSearcher = new Searcher(filepath, headersIncluded);
+      this.csvSearcher.initialize(filepath, headersIncluded);
     } catch (IllegalArgumentException iaExn) {
       if (iaExn
           .getMessage()

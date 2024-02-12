@@ -30,7 +30,7 @@ public class ViewCsvHandler extends CsvHandler implements Route {
    * Interprets and executes user request.
    *
    * @param request the Request of the user
-   * @param response the Response to the request // TODO ???? unused? but also unused in livecode
+   * @param response the Response to the request, unused in this implementation
    * @return a serialized json describing the results of executing request
    */
   @Override
@@ -44,7 +44,7 @@ public class ViewCsvHandler extends CsvHandler implements Route {
     Map<String, Object> responseMap = new HashMap<>();
     responseMap.put("endpoint", "viewcsv");
 
-    if (this.csvSearcher == null) {
+    if (!this.csvSearcher.isInitialized()) {
       responseMap.put("result", "error_bad_json");
       responseMap.put(
           "error message", "Attempted to viewcsv before loading in a csv with loadcsv.");
