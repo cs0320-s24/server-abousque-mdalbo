@@ -21,13 +21,13 @@ public class CsvParser<T> {
    */
   public CsvParser(Reader src, CreatorFromRow<T> converter) throws IllegalArgumentException {
     if (src == null) {
-      throw new IllegalArgumentException("CSVParser: src must be nonnull.");
+      throw new IllegalArgumentException("CSV source must be nonnull.");
     } else {
       this.reader = new BufferedReader(src);
     }
 
     if (converter == null) {
-      throw new IllegalArgumentException("CSVParser: converter must be nonnull.");
+      throw new IllegalArgumentException("CSV row converter must be nonnull.");
     } else {
       this.converter = converter;
     }
@@ -57,7 +57,7 @@ public class CsvParser<T> {
         throw new IOException("Unable to read CSV starting at line #" + currentRowIndex + ".");
       } catch (FactoryFailureException ffExn) {
         throw new FactoryFailureException(
-            "Unable to convert CSV line #" + currentRowIndex + " to expected row type", ffExn.row);
+            "Unable to convert CSV line #" + currentRowIndex + " to expected row type.", ffExn.row);
       }
     }
     return parsed;
