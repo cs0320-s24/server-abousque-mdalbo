@@ -1,10 +1,8 @@
 package edu.brown.cs.student.main.server.csv;
 
-import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import java.util.Map;
 
 public abstract class CsvHandler {
-  protected static Searcher csvSearcher;
 
   /**
    * Converts a String to a boolean and throws exception if given something other than
