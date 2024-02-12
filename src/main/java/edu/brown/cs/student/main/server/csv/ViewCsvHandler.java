@@ -46,7 +46,8 @@ public class ViewCsvHandler extends CsvHandler implements Route {
 
     if (this.csvSearcher == null) {
       responseMap.put("result", "error_bad_json");
-      responseMap.put("message", "Attempted to viewcsv before loading in a csv with loadcsv.");
+      responseMap.put(
+          "error message", "Attempted to viewcsv before loading in a csv with loadcsv.");
     } else {
       responseMap.put(
           "data", postProcessJson(csvContentsAdapter.toJson(this.csvSearcher.getFullCsv())));

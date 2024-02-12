@@ -31,7 +31,7 @@ public abstract class CsvHandler {
    */
   protected Map<String, Object> mapBadRequestError(Map<String, Object> response, Exception exn) {
     response.put("result", "error_bad_request");
-    response.put("message", exn.getMessage());
+    response.put("error message", exn.getMessage());
     return response;
   }
 
@@ -44,7 +44,7 @@ public abstract class CsvHandler {
    */
   protected Map<String, Object> mapErrorDatasource(Map<String, Object> response, Exception exn) {
     response.put("result", "error_datasource");
-    response.put("message", exn.getMessage());
+    response.put("error message", exn.getMessage());
     return response;
   }
 }
