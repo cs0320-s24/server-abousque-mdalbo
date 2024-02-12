@@ -51,9 +51,8 @@ public class LoadCsvHandler extends CsvHandler implements Route {
       responseMap.put("filepath", filepath);
       String headersIncludedString = request.queryParams("headersIncluded");
       responseMap.put("headersIncluded", headersIncludedString);
-      if (filepath == null | headersIncludedString == null) {
-        throw new IllegalArgumentException(
-            "Required argument " + filepath == null ? "filepath" : "headersIncluded" + " missing.");
+      if (headersIncludedString == null) {
+        throw new IllegalArgumentException("Required argument headersIncluded is missing.");
       }
       headersIncluded = super.parseBoolean(headersIncludedString);
 
