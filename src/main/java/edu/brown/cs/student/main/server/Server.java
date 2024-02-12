@@ -9,10 +9,14 @@ import edu.brown.cs.student.main.server.csv.ViewCsvHandler;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import spark.Spark;
 
+/** A class for running CSV searcher and ACS APIs. */
 public class Server {
   static final int port = 3232;
   private final Searcher csvSearcher = new Searcher();
 
+  /**
+   * Constructor for the Server class.
+   */
   // TODO: Server should take an AcsDataSource for mocking purposes in testing
   public Server() {
     Spark.port(this.port);

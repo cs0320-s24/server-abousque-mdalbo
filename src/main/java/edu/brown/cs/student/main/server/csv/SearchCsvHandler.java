@@ -12,11 +12,12 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/** Handler for the searchcsv endpoint. */
 public class SearchCsvHandler extends CsvHandler implements Route {
   private Searcher csvSearcher;
 
   /**
-   * Constructor for the LoadCsvHandler class
+   * Constructor for the LoadCsvHandler class.
    *
    * @param csvSearcher a reference to where the csv file should be loaded into via a Searcher
    */

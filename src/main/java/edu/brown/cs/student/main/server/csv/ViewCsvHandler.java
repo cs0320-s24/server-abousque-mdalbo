@@ -18,7 +18,7 @@ public class ViewCsvHandler extends CsvHandler implements Route {
   private Searcher csvSearcher;
 
   /**
-   * Constructor for the LoadCsvHandler class
+   * Constructor for the LoadCsvHandler class.
    *
    * @param csvSearcher a reference to where the csv file contents can be found via a Searcher
    */

@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server.csv;
 
 import java.util.Map;
 
+/** Abstract parent class for CSV endpoint handlers. */
 public abstract class CsvHandler {
 
   /**

@@ -19,7 +19,7 @@ public class LoadCsvHandler extends CsvHandler implements Route {
   private Searcher csvSearcher;
 
   /**
-   * Constructor for the LoadCsvHandler class
+   * Constructor for the LoadCsvHandler class.
    *
    * @param csvSearcher a reference to where the csv file should be loaded into via a Searcher
    */
