@@ -20,7 +20,7 @@ import spark.Spark;
 
 /** A class for unit testing of the functionality of the LoadCsvHandler class. */
 public class TestLoadCsvHandler {
-  private Searcher csvSearcher;
+  private final Searcher csvSearcher = new Searcher();
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
   private JsonAdapter<Map<String, Object>> adapter;
