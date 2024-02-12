@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
+import edu.brown.cs.student.main.server.csv.SearchCsvHandler;
 import edu.brown.cs.student.main.server.csv.ViewCsvHandler;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import java.io.IOException;
@@ -20,11 +21,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spark.Spark;
 
-/** A class for unit testing of the functionality of the LoadCsvHandler class. */
-public class TestViewCsvHandler {
+/** A class for unit testing of the functionality of the SearchCsvHandler class. */
+public class TestSearchCsvHandler {
   private final Searcher csvSearcher = new Searcher();
   private LoadCsvHandler loadcsv;
   private ViewCsvHandler viewcsv;
+  private SearchCsvHandler searchcsv;
 
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
@@ -38,9 +40,10 @@ public class TestViewCsvHandler {
   public void setup() {
     this.loadcsv = new LoadCsvHandler(this.csvSearcher);
     this.viewcsv = new ViewCsvHandler(this.csvSearcher);
+    this.searchcsv = new SearchCsvHandler(this.csvSearcher);
     // Re-initialize parser, state, etc. for every test method
     Spark.get("/loadcsv", this.loadcsv);
-    Spark.get("/viewcsv", this.viewcsv);
+    Spark.get("/searchcsv", this.searchcsv);
     Spark.awaitInitialization();
 
     Moshi moshi = new Moshi.Builder().build();
@@ -51,7 +54,7 @@ public class TestViewCsvHandler {
   @AfterEach
   public void tearDown() {
     Spark.unmap("/loadcsv");
-    Spark.unmap("/viewcsv");
+    Spark.unmap("/searchcsv");
     Spark.awaitStop();
   }
 
@@ -81,7 +84,7 @@ public class TestViewCsvHandler {
   }
 
   /**
-   * Helper to start a connection to the viewcsv endpoint.
+   * Helper to start a connection to the searchcsv endpoint.
    *
    * <p>Adapted from February 8, 2024 cs32 livecode.
    *
@@ -91,9 +94,9 @@ public class TestViewCsvHandler {
    * @return the connection for the given URL, just after connecting
    * @throws IOException if the connection fails for some reason
    */
-  private HttpURLConnection tryRequestViewCsv() throws IOException {
+  private HttpURLConnection tryRequestSearchCsv() throws IOException {
     // Configure the connection (but don't actually send a request yet)
-    URL requestURL = new URL("http://localhost:" + Spark.port() + "/viewcsv");
+    URL requestURL = new URL("http://localhost:" + Spark.port() + "/searchcsv");
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     // The request body contains a Json object
     clientConnection.setRequestProperty("Content-Type", "application/json");
@@ -118,52 +121,40 @@ public class TestViewCsvHandler {
   }
 
   /**
-   * Test error when viewing a CSV before loading one.
+   * Helper to load a csv with its handler and verify success.
    *
+   * @param path the path from data/ to the csv to load
+   * @param headersIncluded a boolean describing if the csv file at path has a header row
    * @throws IOException if unable to connect to Server
    */
-  @Test
-  public void testViewBeforeLoad() throws IOException {
-    HttpURLConnection viewConnection = tryRequestViewCsv();
-    assertEquals(200, viewConnection.getResponseCode());
-
-    Map<String, Object> viewResponseBody =
-        adapter.fromJson(new Buffer().readFrom(viewConnection.getInputStream()));
-    showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_json", viewResponseBody.get("result"));
-    assertEquals(
-        "Attempted to viewcsv before loading in a csv with loadcsv.",
-        viewResponseBody.get("error message"));
-
-    viewConnection.disconnect(); // close gracefully
-  }
-
-  /**
-   * Test successful viewcsv (after loadcsv).
-   *
-   * @throws IOException if unable to connect to Server
-   */
-  @Test
-  public void testSuccess() throws IOException {
-    // loadcsv
+  public void loadAndVerifySuccess(String path, boolean headersIncluded) throws IOException {
     HttpURLConnection loadConnection =
-        tryRequestLoadCsv("filepath=value_multiple_columns.csv&headersIncluded=true");
+        tryRequestLoadCsv("filepath=" + path + "&headersIncluded=" + headersIncluded);
     assertEquals(200, loadConnection.getResponseCode());
     Map<String, Object> responseBody =
         adapter.fromJson(new Buffer().readFrom(loadConnection.getInputStream()));
     showDetailsIfError(responseBody);
     assertEquals("success", responseBody.get("result"));
+  }
 
-    // viewcsv
-    HttpURLConnection viewConnection = tryRequestViewCsv();
-    assertEquals(200, viewConnection.getResponseCode());
+  /**
+   * Test error when searching a CSV before loading one.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchBeforeLoad() throws IOException {
+    HttpURLConnection searchConnection = tryRequestSearchCsv();
+    assertEquals(200, searchConnection.getResponseCode());
+
     Map<String, Object> viewResponseBody =
-        adapter.fromJson(new Buffer().readFrom(viewConnection.getInputStream()));
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("success", viewResponseBody.get("result"));
-    assertEquals("viewcsv", viewResponseBody.get("endpoint"));
+    assertEquals("error_bad_json", viewResponseBody.get("result"));
+    assertEquals(
+        "Attempted to searchcsv before loading in a csv with loadcsv.",
+        viewResponseBody.get("error message"));
 
-    viewConnection.disconnect(); // close gracefully
-    loadConnection.disconnect(); // close gracefully
+    searchConnection.disconnect(); // close gracefully
   }
 }
