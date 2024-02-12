@@ -7,9 +7,6 @@ import java.net.URLDecoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 import spark.Request;
 import spark.Response;
@@ -40,13 +37,15 @@ public class CensusHandler implements Route {
     Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
     String county = request.queryParams("county");
     String countyCode = countyToInt.get(county + ", " + state);
-    Map<String,Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode,state,county);
+    Map<String, Object> responseMap =
+        this.datasource.queryBroadband(stateCode, countyCode, state, county);
     return responseMap;
   }
 
   /**
    * The queryStateNumbers method is called in the CensusHandler constructor. It returns a map
    * between all the states and their corresponding numbers.
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -68,6 +67,7 @@ public class CensusHandler implements Route {
    * This method takes in the state number and then queries the census.gov api to get the codes of
    * the counties in that state. It returns a map of the county names to their corresponding
    * numbers.
+   *
    * @param state
    * @return
    * @throws URISyntaxException
