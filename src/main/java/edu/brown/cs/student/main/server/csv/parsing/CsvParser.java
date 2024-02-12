@@ -21,13 +21,14 @@ public class CsvParser<T> {
    */
   public CsvParser(Reader src, CreatorFromRow<T> converter) throws IllegalArgumentException {
     if (src == null) {
-      throw new IllegalArgumentException("CSV source must be nonnull.");
+      throw new IllegalArgumentException("Provided null CSV source; CSV source must be nonnull.");
     } else {
       this.reader = new BufferedReader(src);
     }
 
     if (converter == null) {
-      throw new IllegalArgumentException("CSV row converter must be nonnull.");
+      throw new IllegalArgumentException(
+          "Provided null CSV row converter; converter must be nonnull.");
     } else {
       this.converter = converter;
     }

@@ -71,7 +71,7 @@ public class Searcher {
     CsvParser<List<String>> csvParser = generateCsvParser(pathFromData);
     this.fullCsvContents = csvParser.parse();
     if (this.fullCsvContents.isEmpty()) {
-      throw new IllegalArgumentException("User provided empty file.");
+      throw new IllegalArgumentException("User provided empty file. File must be non-empty.");
     }
     this.numCols = this.fullCsvContents.get(0).size();
     this.checkConsistentRows();
@@ -128,7 +128,10 @@ public class Searcher {
     for (List<String> row : this.fullCsvContents) {
       if (row.size() != this.numCols) {
         throw new IllegalArgumentException(
-            "Encountered a row with length inconsistent to first row of CSV: " + row);
+            "Encountered row with length inconsistent to expected length "
+                + this.numCols
+                + " based on first row of CSV: "
+                + row);
       }
     }
   }
@@ -165,17 +168,25 @@ public class Searcher {
       colIndex = Integer.valueOf(columnOfInterest);
       if (colIndex < 0 || colIndex > this.numCols) {
         throw new IndexOutOfBoundsException(
-            "User provided column index outside of the range of the file.");
+            "User provided column index "
+                + colIndex
+                + ", but indices only range from 0 to "
+                + (this.numCols - 1)
+                + ".");
       }
     } catch (NumberFormatException exn) {
       // cannot be interpreted as Integer => column provided must be a name rather than an integer
       if (this.columnHeaderToIndex == null) {
         throw new IllegalArgumentException(
-            "User provided column name but previously indicated that columns are not named.");
+            "User provided a column name but previously indicated that columns are not named.");
       } else if (this.columnHeaderToIndex.containsKey(columnOfInterest.toLowerCase())) {
         colIndex = this.columnHeaderToIndex.get(columnOfInterest.toLowerCase());
       } else {
-        throw new IndexOutOfBoundsException("User provided column name not present in file.");
+        throw new IndexOutOfBoundsException(
+            "User provided column name "
+                + columnOfInterest
+                + " which is not present in file. Columns available are: "
+                + this.columnHeaderToIndex.keySet());
       }
     }
     return colIndex;
