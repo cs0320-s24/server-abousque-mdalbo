@@ -16,6 +16,17 @@ import spark.Route;
 /** A class to handle the loadcsv endpoint. */
 public class LoadCsvHandler extends CsvHandler implements Route {
 
+  private Searcher csvSearcher;
+
+  /**
+   * Constructor for the LoadCsvHandler class
+   *
+   * @param csvSearcher a reference to where the csv file should be loaded into via a Searcher
+   */
+  public LoadCsvHandler(Searcher csvSearcher) {
+    this.csvSearcher = csvSearcher;
+  }
+
   /**
    * Interprets and executes user request.
    *
@@ -46,7 +57,7 @@ public class LoadCsvHandler extends CsvHandler implements Route {
       }
       headersIncluded = super.parseBoolean(headersIncludedString);
 
-      CsvHandler.csvSearcher = new Searcher(filepath, headersIncluded);
+      this.csvSearcher = new Searcher(filepath, headersIncluded);
     } catch (IllegalArgumentException iaExn) {
       if (iaExn
           .getMessage()
