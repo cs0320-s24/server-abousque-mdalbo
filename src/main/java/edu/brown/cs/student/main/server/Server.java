@@ -47,7 +47,7 @@ public class Server {
    * @param args unused
    */
   public static void main(String[] args) {
-    Server server = new Server(new CensusAPI());
+    new Server(new CensusAPI());
     System.out.println("Server started at http://localhost:" + port);
     System.out.println(
         """
