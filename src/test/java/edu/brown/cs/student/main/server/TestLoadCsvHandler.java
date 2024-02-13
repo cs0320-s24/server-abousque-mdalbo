@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
+import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -19,6 +20,7 @@ import spark.Spark;
 
 /** A class for unit testing of the functionality of the LoadCsvHandler class. */
 public class TestLoadCsvHandler {
+  private final Searcher csvSearcher = new Searcher();
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
   private JsonAdapter<Map<String, Object>> adapter;
@@ -26,7 +28,7 @@ public class TestLoadCsvHandler {
   @BeforeEach
   public void setup() {
     // Re-initialize parser, state, etc. for every test method
-    Spark.get("/loadcsv", new LoadCsvHandler());
+    Spark.get("/loadcsv", new LoadCsvHandler(this.csvSearcher));
     Spark.awaitInitialization();
 
     Moshi moshi = new Moshi.Builder().build();

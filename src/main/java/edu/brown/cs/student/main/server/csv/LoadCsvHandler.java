@@ -16,11 +16,22 @@ import spark.Route;
 /** A class to handle the loadcsv endpoint. */
 public class LoadCsvHandler extends CsvHandler implements Route {
 
+  private Searcher csvSearcher;
+
+  /**
+   * Constructor for the LoadCsvHandler class.
+   *
+   * @param csvSearcher a reference to where the csv file should be loaded into via a Searcher
+   */
+  public LoadCsvHandler(Searcher csvSearcher) {
+    this.csvSearcher = csvSearcher;
+  }
+
   /**
    * Interprets and executes user request.
    *
    * @param request the Request of the user
-   * @param response the Response to the request // TODO ???? unused? but also unused in livecode
+   * @param response the Response to the request, unused in this implementation
    * @return a serialized json describing the results of executing request
    */
   @Override
@@ -40,13 +51,11 @@ public class LoadCsvHandler extends CsvHandler implements Route {
       responseMap.put("filepath", filepath);
       String headersIncludedString = request.queryParams("headersIncluded");
       responseMap.put("headersIncluded", headersIncludedString);
-      if (filepath == null | headersIncludedString == null) {
-        throw new IllegalArgumentException(
-            "Required argument " + filepath == null ? "filepath" : "headersIncluded" + " missing.");
+      if (headersIncludedString == null) {
+        throw new IllegalArgumentException("Required argument headersIncluded is missing.");
       }
       headersIncluded = super.parseBoolean(headersIncludedString);
-
-      CsvHandler.csvSearcher = new Searcher(filepath, headersIncluded);
+      this.csvSearcher.initialize(filepath, headersIncluded);
     } catch (IllegalArgumentException iaExn) {
       if (iaExn
           .getMessage()
