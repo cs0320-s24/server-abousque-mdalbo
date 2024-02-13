@@ -15,7 +15,7 @@ import spark.Route;
 /** Handler for the /broadband endpoint. */
 public class CensusHandler implements Route {
   private Map<String, String> stateToNums;
-  private AcsDatasource datasource;
+  private final AcsDatasource datasource;
 
   public CensusHandler(AcsDatasource acsDatasource) {
 
