@@ -24,9 +24,6 @@ import spark.Spark;
 /** A class for unit testing of the functionality of the SearchCsvHandler class. */
 public class TestSearchCsvHandler {
   private final Searcher csvSearcher = new Searcher();
-  private LoadCsvHandler loadcsv;
-  private ViewCsvHandler viewcsv;
-  private SearchCsvHandler searchcsv;
 
   private final Type mapStringObject =
       Types.newParameterizedType(Map.class, String.class, Object.class);
@@ -38,12 +35,12 @@ public class TestSearchCsvHandler {
 
   @BeforeEach
   public void setup() {
-    this.loadcsv = new LoadCsvHandler(this.csvSearcher);
-    this.viewcsv = new ViewCsvHandler(this.csvSearcher);
-    this.searchcsv = new SearchCsvHandler(this.csvSearcher);
+    LoadCsvHandler loadcsv = new LoadCsvHandler(this.csvSearcher);
+    ViewCsvHandler viewcsv = new ViewCsvHandler(this.csvSearcher);
+    SearchCsvHandler searchcsv = new SearchCsvHandler(this.csvSearcher);
     // Re-initialize parser, state, etc. for every test method
-    Spark.get("/loadcsv", this.loadcsv);
-    Spark.get("/searchcsv", this.searchcsv);
+    Spark.get("/loadcsv", loadcsv);
+    Spark.get("/searchcsv", searchcsv);
     Spark.awaitInitialization();
 
     Moshi moshi = new Moshi.Builder().build();
