@@ -29,6 +29,16 @@ public class CensusAPI implements AcsDatasource {
         responseMap.put("Broadband Use", stats);
         return responseMap;
     }
+
+    /**
+     *
+     * @param state
+     * @param county
+     * @return a String with the County Broadband usage
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private String queryCountyStats(String state, String county)
             throws URISyntaxException, IOException, InterruptedException {
         HttpRequest getCountyInfo =
