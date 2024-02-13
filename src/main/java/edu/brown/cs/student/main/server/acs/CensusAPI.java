@@ -32,7 +32,7 @@ public class CensusAPI implements AcsDatasource {
       System.out.println("error querying county stats");
       return null;
     }
-    Map<String, Object> responseMap = new HashMap<String, Object>();
+    Map<String, Object> responseMap = new HashMap<>();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     LocalDateTime now = LocalDateTime.now();
     responseMap.put("date accessed", dtf.format(now));
