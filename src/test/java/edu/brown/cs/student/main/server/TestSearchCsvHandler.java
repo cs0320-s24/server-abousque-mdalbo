@@ -91,12 +91,13 @@ public class TestSearchCsvHandler {
    * <p>The "throws" clause doesn't matter below -- JUnit will fail if an exception is thrown that
    * hasn't been declared as a parameter to @Test.
    *
+   * @param args the arguments to pass to the endpoint, following a "?"
    * @return the connection for the given URL, just after connecting
    * @throws IOException if the connection fails for some reason
    */
-  private HttpURLConnection tryRequestSearchCsv() throws IOException {
+  private HttpURLConnection tryRequestSearchCsv(String args) throws IOException {
     // Configure the connection (but don't actually send a request yet)
-    URL requestURL = new URL("http://localhost:" + Spark.port() + "/searchcsv");
+    URL requestURL = new URL("http://localhost:" + Spark.port() + "/searchcsv?" + args);
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     // The request body contains a Json object
     clientConnection.setRequestProperty("Content-Type", "application/json");
@@ -144,7 +145,7 @@ public class TestSearchCsvHandler {
    */
   @Test
   public void testSearchBeforeLoad() throws IOException {
-    HttpURLConnection searchConnection = tryRequestSearchCsv();
+    HttpURLConnection searchConnection = tryRequestSearchCsv("");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
@@ -155,6 +156,144 @@ public class TestSearchCsvHandler {
         "Attempted to searchcsv before loading in a csv with loadcsv.",
         viewResponseBody.get("error message"));
 
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test error when searching a CSV without a target.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchNullTarget() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    HttpURLConnection searchConnection = tryRequestSearchCsv("columnOfInterest=racemisnamed");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test error when searching a CSV with an out-of-bounds column index.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchOutOfBoundsCol() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    // nonexistent column
+    HttpURLConnection searchConnection = tryRequestSearchCsv("target=White&columnOfInterest=racemisnamed");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+
+    // column index out of bounds
+    searchConnection = tryRequestSearchCsv("target=14559&columnOfInterest=-2");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+
+    searchConnection = tryRequestSearchCsv("target=14559&columnOfInterest=10");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test success searching for value in a specific column by name.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchSuccessColName() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    HttpURLConnection searchConnection = tryRequestSearchCsv(
+        "target=Asian&columnOfInterest=Race");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("success", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test success searching for value in a specific column by index.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchSuccessColIndex() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    HttpURLConnection searchConnection = tryRequestSearchCsv(
+        "target=Asian&columnOfInterest=1");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("success", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test success searching for value in all columns.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchSuccessAllCols() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    HttpURLConnection searchConnection = tryRequestSearchCsv(
+        "target=46084");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("success", viewResponseBody.get("result"));
+    searchConnection.disconnect(); // close gracefully
+  }
+
+  /**
+   * Test success searching for value not present in file.
+   *
+   * @throws IOException if unable to connect to Server
+   */
+  @Test
+  public void testSearchSuccessNoHits() throws IOException {
+    loadAndVerifySuccess("census/income_by_race.csv", true);
+
+    HttpURLConnection searchConnection = tryRequestSearchCsv(
+        "target=1234567890");
+    assertEquals(200, searchConnection.getResponseCode());
+
+    Map<String, Object> viewResponseBody =
+        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    showDetailsIfError(viewResponseBody);
+    assertEquals("success", viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
   }
 }
