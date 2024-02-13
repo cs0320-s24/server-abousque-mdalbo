@@ -12,14 +12,11 @@ import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import spark.Spark;
 
 /**
- * A class for running CSV searcher and ACS APIs.
- *
- * ACS API is cached in this implementation with cached results held for 4 minutes.
+ * A class for running CSV searcher and ACS APIs. ACS API is cached in this implementation with
+ * cached results held for 4 minutes.
  */
 public class Server {
   static final int port = 3232;
-  private final Searcher csvSearcher = new Searcher();
-  private final AcsDatasource acsDatasource;
 
   /**
    * Constructor for the Server class.
@@ -27,25 +24,25 @@ public class Server {
    * @param acsDatasource the data source object to use for querying broadband data
    */
   public Server(AcsDatasource acsDatasource) {
-    Spark.port(this.port);
-    this.acsDatasource = acsDatasource;
+    Spark.port(port);
+    Searcher csvSearcher = new Searcher();
     after(
         (request, response) -> {
           response.header("Access-Control-Allow-Origin", "*");
           response.header("Access-Control-Allow-Methods", "*");
         });
 
-    Spark.get("/broadband", new CensusHandler(this.acsDatasource));
-    Spark.get("/loadcsv", new LoadCsvHandler(this.csvSearcher));
-    Spark.get("/viewcsv", new ViewCsvHandler(this.csvSearcher));
-    Spark.get("/searchcsv", new SearchCsvHandler(this.csvSearcher));
+    Spark.get("/broadband", new CensusHandler(acsDatasource));
+    Spark.get("/loadcsv", new LoadCsvHandler(csvSearcher));
+    Spark.get("/viewcsv", new ViewCsvHandler(csvSearcher));
+    Spark.get("/searchcsv", new SearchCsvHandler(csvSearcher));
 
     Spark.awaitInitialization();
   }
 
   /**
-   * The main method for running a cached server servicing the
-   * broadband, loadcsv, viewcsv, and searchscv endpoints.
+   * The main method for running a cached server servicing the broadband, loadcsv, viewcsv, and
+   * searchscv endpoints.
    *
    * @param args unused
    */
