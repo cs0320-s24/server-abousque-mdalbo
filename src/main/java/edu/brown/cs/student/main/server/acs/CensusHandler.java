@@ -12,12 +12,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/** Handler for the /broadband endpoint. */
 public class CensusHandler implements Route {
   private Map<String, String> stateToNums;
   private AcsDatasource datasource;
 
-  public CensusHandler() {
-    this.datasource = new CensusAPI();
+  public CensusHandler(AcsDatasource acsDatasource) {
+
+    this.datasource = new CachedAcsAPI(acsDatasource, 200, 4);
     try {
       this.stateToNums = this.queryStateNumbers();
     } catch (IOException e) {
@@ -37,8 +39,9 @@ public class CensusHandler implements Route {
     Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
     String county = request.queryParams("county");
     String countyCode = countyToInt.get(county + ", " + state);
-    Map<String, Object> responseMap =
-        this.datasource.queryBroadband(stateCode, countyCode, state, county);
+    Map<String, Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
+    responseMap.put("County", county);
+    responseMap.put("State", state);
     return responseMap;
   }
 
