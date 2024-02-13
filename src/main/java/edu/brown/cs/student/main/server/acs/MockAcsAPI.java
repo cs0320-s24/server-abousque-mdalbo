@@ -12,8 +12,7 @@ public class MockAcsAPI implements AcsDatasource {
    * @param countyCode the County of interest in state
    * @return a response Map describing the results of this query
    */
-  public Map<String, Object> queryBroadband(
-      String stateCode, String countyCode, String state, String county) {
+  public Map<String, Object> queryBroadband(String stateCode, String countyCode) {
     // TODO: implement
     return new HashMap<String, Object>();
   }
