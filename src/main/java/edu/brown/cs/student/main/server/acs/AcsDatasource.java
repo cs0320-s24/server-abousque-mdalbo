@@ -12,5 +12,5 @@ public interface AcsDatasource {
    * @param countyCode the ACS code of the County of interest in state
    * @return a response Map describing the results of this query
    */
-  public Map<String, Object> queryBroadband(String stateCode, String countyCode);
+  Map<String, Object> queryBroadband(String stateCode, String countyCode);
 }
