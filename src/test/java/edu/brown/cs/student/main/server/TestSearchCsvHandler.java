@@ -188,7 +188,8 @@ public class TestSearchCsvHandler {
     loadAndVerifySuccess("census/income_by_race.csv", true);
 
     // nonexistent column
-    HttpURLConnection searchConnection = tryRequestSearchCsv("target=White&columnOfInterest=racemisnamed");
+    HttpURLConnection searchConnection =
+        tryRequestSearchCsv("target=White&columnOfInterest=racemisnamed");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
@@ -201,8 +202,7 @@ public class TestSearchCsvHandler {
     searchConnection = tryRequestSearchCsv("target=14559&columnOfInterest=-2");
     assertEquals(200, searchConnection.getResponseCode());
 
-    viewResponseBody =
-        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    viewResponseBody = adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
     assertEquals("error_bad_request", viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
@@ -210,8 +210,7 @@ public class TestSearchCsvHandler {
     searchConnection = tryRequestSearchCsv("target=14559&columnOfInterest=10");
     assertEquals(200, searchConnection.getResponseCode());
 
-    viewResponseBody =
-        adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
+    viewResponseBody = adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
     assertEquals("error_bad_request", viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
@@ -226,8 +225,7 @@ public class TestSearchCsvHandler {
   public void testSearchSuccessColName() throws IOException {
     loadAndVerifySuccess("census/income_by_race.csv", true);
 
-    HttpURLConnection searchConnection = tryRequestSearchCsv(
-        "target=Asian&columnOfInterest=Race");
+    HttpURLConnection searchConnection = tryRequestSearchCsv("target=Asian&columnOfInterest=Race");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
@@ -246,8 +244,7 @@ public class TestSearchCsvHandler {
   public void testSearchSuccessColIndex() throws IOException {
     loadAndVerifySuccess("census/income_by_race.csv", true);
 
-    HttpURLConnection searchConnection = tryRequestSearchCsv(
-        "target=Asian&columnOfInterest=1");
+    HttpURLConnection searchConnection = tryRequestSearchCsv("target=Asian&columnOfInterest=1");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
@@ -266,8 +263,7 @@ public class TestSearchCsvHandler {
   public void testSearchSuccessAllCols() throws IOException {
     loadAndVerifySuccess("census/income_by_race.csv", true);
 
-    HttpURLConnection searchConnection = tryRequestSearchCsv(
-        "target=46084");
+    HttpURLConnection searchConnection = tryRequestSearchCsv("target=46084");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
@@ -286,8 +282,7 @@ public class TestSearchCsvHandler {
   public void testSearchSuccessNoHits() throws IOException {
     loadAndVerifySuccess("census/income_by_race.csv", true);
 
-    HttpURLConnection searchConnection = tryRequestSearchCsv(
-        "target=1234567890");
+    HttpURLConnection searchConnection = tryRequestSearchCsv("target=1234567890");
     assertEquals(200, searchConnection.getResponseCode());
 
     Map<String, Object> viewResponseBody =
