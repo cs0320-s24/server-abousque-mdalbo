@@ -32,9 +32,14 @@ public class CachedAcsAPI implements AcsDatasource {
                 // Strategy pattern: how should the cache behave when
                 // it's asked for something it doesn't have?
                 new CacheLoader<>() {
+                  /**
+                   * How to load data into the cache from the ACS datasource.
+                   *
+                   * @param codes a String formatted "{countyCode},{stateCode}"
+                   * @return a Map describing the query results
+                   */
                   @Override
                   public Map<String, Object> load(String codes) {
-                    // Note: codes is "{countyCode},{stateCode}"
                     String[] codesList = codes.split(",");
                     String countyCode = codesList[0];
                     String stateCode = codesList[1];
