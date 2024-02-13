@@ -41,8 +41,6 @@ public class SearchCsvHandler extends CsvHandler implements Route {
     Moshi moshi = new Moshi.Builder().build();
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
-    Type listListStringObject = Types.newParameterizedType(List.class, List.class, String.class);
-    JsonAdapter<List<List<String>>> csvContentsAdapter = moshi.adapter(listListStringObject);
 
     Map<String, Object> responseMap = new HashMap<>();
     responseMap.put("endpoint", "searchcsv");
@@ -65,19 +63,9 @@ public class SearchCsvHandler extends CsvHandler implements Route {
       } catch (IllegalArgumentException | IndexOutOfBoundsException exn) {
         return adapter.toJson(super.mapBadRequestError(responseMap, exn));
       }
-      responseMap.put("data", postProcessJson(csvContentsAdapter.toJson(searchResults)));
+      responseMap.put("data", searchResults);
       responseMap.put("result", "success");
     }
     return adapter.toJson(responseMap);
-  }
-
-  /**
-   * Cleans up json view of CSV by replacing any \" with a single ".
-   *
-   * @param original the String json that may contain \"
-   * @return original with any cases of \" replaced with a single "
-   */
-  private String postProcessJson(String original) {
-    return original.replaceAll("\\\"", "'");
   }
 }

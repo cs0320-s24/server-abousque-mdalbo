@@ -6,7 +6,6 @@ import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import spark.Request;
 import spark.Response;
@@ -38,8 +37,6 @@ public class ViewCsvHandler extends CsvHandler implements Route {
     Moshi moshi = new Moshi.Builder().build();
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
-    Type listListStringObject = Types.newParameterizedType(List.class, List.class, String.class);
-    JsonAdapter<List<List<String>>> csvContentsAdapter = moshi.adapter(listListStringObject);
 
     Map<String, Object> responseMap = new HashMap<>();
     responseMap.put("endpoint", "viewcsv");
@@ -49,20 +46,9 @@ public class ViewCsvHandler extends CsvHandler implements Route {
       responseMap.put(
           "error message", "Attempted to viewcsv before loading in a csv with loadcsv.");
     } else {
-      responseMap.put(
-          "data", postProcessJson(csvContentsAdapter.toJson(this.csvSearcher.getFullCsv())));
+      responseMap.put("data", this.csvSearcher.getFullCsv());
       responseMap.put("result", "success");
     }
     return adapter.toJson(responseMap);
-  }
-
-  /**
-   * Cleans up json view of CSV by replacing any \" with a single ".
-   *
-   * @param original the String json that may contain \"
-   * @return original with any cases of \" replaced with a single "
-   */
-  private String postProcessJson(String original) {
-    return original.replaceAll("\\\"", "'");
   }
 }
