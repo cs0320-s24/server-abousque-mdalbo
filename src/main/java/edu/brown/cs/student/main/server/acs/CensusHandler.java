@@ -1,13 +1,20 @@
 package edu.brown.cs.student.main.server.acs;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.Map;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -31,18 +38,70 @@ public class CensusHandler implements Route {
     }
   }
 
+  /**
+   * The handle method is called everytime a request is sent to broadband. It gets the state number, than county number
+   * and finally looks up the broadband use.
+   * @param request
+   * @param response
+   * @return
+   */
   @Override
-  public Object handle(Request request, Response response) throws Exception {
+  public Object handle(Request request, Response response) {
     // link to get all state codes:https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
-    String state = URLDecoder.decode(request.queryParams("state"), "UTF-8");
+    Moshi moshi = new Moshi.Builder().build();
+    Type mapStringObject = Types.newParameterizedType(Map.class,String.class,String.class);
+    JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
+    Map<String,Object> errorMap = new HashMap<>();
+    String state = request.queryParams("state");
+    if (state == null) {
+      errorMap.put("result", "error_bad_request: make sure that you have a state parameter");
+      return adapter.toJson(errorMap);
+    }
+    try {
+      state = URLDecoder.decode(state, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      errorMap.put("result", "error_bad_request");
+      return adapter.toJson(errorMap);
+    }
+    Map<String,String> countyToInt;
     String stateCode = this.stateToNums.get(state);
-    Map<String, String> countyToInt = this.queryCountyNumbers(stateCode);
+    try {
+      countyToInt = this.queryCountyNumbers(stateCode);
+    } catch (IOException e) {
+      errorMap.put("result","error_datasource");
+      return adapter.toJson(errorMap);
+    } catch (URISyntaxException e) {
+      errorMap.put("result","error_bad_request");
+      return adapter.toJson(errorMap);
+    } catch (InterruptedException e) {
+      errorMap.put("result","error_datasource");
+      return adapter.toJson(errorMap);
+    }
     String county = request.queryParams("county");
+    if (county == null) {
+      errorMap.put("result", "error_bad_request: make sure to have a county parameter");
+      return adapter.toJson(errorMap);
+    }
+    try {
+      county = URLDecoder.decode(county, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      errorMap.put("result", "error_bad_request");
+      return adapter.toJson(errorMap);
+    }
     String countyCode = countyToInt.get(county + ", " + state);
-    Map<String, Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
+    if (countyCode == null) {
+      errorMap.put("result", "error_datasource");
+      return adapter.toJson(errorMap);
+    }
+    Map<String,Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
     responseMap.put("County", county);
     responseMap.put("State", state);
-    return responseMap;
+    if (responseMap.containsKey("result")) {
+      return adapter.toJson(responseMap);
+    }
+    responseMap.put("result", "success");
+
+    return adapter.toJson(responseMap);
   }
 
   /**

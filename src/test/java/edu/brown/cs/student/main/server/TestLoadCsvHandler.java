@@ -89,7 +89,6 @@ public class TestLoadCsvHandler {
     // no args
     HttpURLConnection connection = tryRequestLoadCsv("");
     assertEquals(200, connection.getResponseCode());
-
     Map<String, Object> responseBody =
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);

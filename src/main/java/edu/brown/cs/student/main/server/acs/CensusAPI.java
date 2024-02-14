@@ -29,8 +29,9 @@ public class CensusAPI implements AcsDatasource {
     try {
       stats = queryCountyStats(stateCode, countyCode);
     } catch (Exception e) {
-      System.out.println("error querying county stats");
-      return null;
+      Map<String,Object > errorMap = new HashMap<>();
+      errorMap.put("result", "error_datasource: no available data for that county");
+      return errorMap;
     }
     Map<String, Object> responseMap = new HashMap<>();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

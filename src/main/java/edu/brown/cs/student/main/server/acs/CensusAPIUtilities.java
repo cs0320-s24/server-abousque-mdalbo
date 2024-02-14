@@ -31,22 +31,15 @@ public class CensusAPIUtilities {
     }
   }
 
-  public static Map<String, String> deserializeCounties(String jsonStateNums) {
-    try {
-      System.out.println("deserializing counties");
+  public static Map<String, String> deserializeCounties(String jsonStateNums) throws IOException{
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<List> adapter = moshi.adapter(List.class);
       List<List<String>> statesToNums = adapter.fromJson(jsonStateNums);
       Map<String, String> map = new HashMap();
-      System.out.println(statesToNums.size());
       for (int i = 1; i < statesToNums.size(); i++) {
         map.put(statesToNums.get(i).get(0), statesToNums.get(i).get(2));
       }
       return map;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return new HashMap<String, String>();
-    }
   }
 
   public static String deserializeBroadband(String jsonCountyInfo) {
