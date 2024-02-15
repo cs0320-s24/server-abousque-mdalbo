@@ -70,6 +70,9 @@ public class CensusApi implements AcsDatasource {
             .build();
     HttpResponse<String> countyInfoResponse =
         HttpClient.newBuilder().build().send(getCountyInfo, HttpResponse.BodyHandlers.ofString());
+    if (countyInfoResponse.body().isEmpty()) {
+      throw new IOException();
+    }
     return CensusApiUtilities.deserializeBroadband(countyInfoResponse.body());
   }
 }
