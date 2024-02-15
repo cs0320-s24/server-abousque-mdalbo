@@ -59,8 +59,9 @@ public class CensusApiUtilities {
    * The deserialize broadband helper method is used to take a json file and get the broadband use.
    * It returns an empty string if there is an error deserializing.
    *
-   * @param jsonCountyInfo
-   * @return
+   * @param jsonCountyInfo pass in the json representing the county information including the
+   *     broadband use
+   * @return returns a string containing the broadband usage
    */
   public static String deserializeBroadband(String jsonCountyInfo) {
     try {
