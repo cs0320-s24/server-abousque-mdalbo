@@ -49,14 +49,11 @@ public class TestAcsDatasource {
     AcsDatasource ds = new CensusApi();
     AcsDatasource wrap = new CachedAcsApi(ds, 20, 1);
     Map<String, Object> firstQuery = wrap.queryBroadband("06", "025");
-    System.out.println(firstQuery);
     Thread.sleep(500);
     Map<String, Object> secondQuery = wrap.queryBroadband("06", "025");
-    System.out.println(secondQuery);
-    assertEquals(firstQuery, secondQuery);
+    assertEquals(secondQuery, firstQuery);
     Thread.sleep(70000);
     Map<String, Object> queryAfterLongPause = wrap.queryBroadband("06", "025");
-    System.out.println(queryAfterLongPause);
     assertFalse(queryAfterLongPause.equals(firstQuery));
   }
 
@@ -74,14 +71,11 @@ public class TestAcsDatasource {
     AcsDatasource ds = new CensusApi();
     AcsDatasource wrap = new CachedAcsApi(ds, 12, 2);
     Map<String, Object> firstQuery = wrap.queryBroadband("06", "025");
-    System.out.println(firstQuery);
     Thread.sleep(60000);
     Map<String, Object> secondQuery = wrap.queryBroadband("06", "025");
-    System.out.println(secondQuery);
     assertEquals(firstQuery, secondQuery);
     Thread.sleep(60050);
     Map<String, Object> queryAfterLongPause = wrap.queryBroadband("06", "025");
-    System.out.println(queryAfterLongPause);
     assertFalse(queryAfterLongPause.equals(firstQuery));
   }
 }
