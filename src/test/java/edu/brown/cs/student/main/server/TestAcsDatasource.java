@@ -10,8 +10,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
- * These tests are unit tests for the needed functionality fo the APIDatasource. There are
- * two different results that can happen from inputting the county and state, given we've already
+ * These tests are unit tests for the needed functionality fo the APIDatasource. There are two
+ * different results that can happen from inputting the county and state, given we've already
  * verified that the county is in the state and has a number: either we have the broadband data
  * usage or the data isn't stored. I test each outcome.
  */

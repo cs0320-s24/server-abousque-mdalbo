@@ -114,9 +114,9 @@ public class CensusHandler implements Route {
    * between all the states and their corresponding numbers.
    *
    * @return a Map from each state name to their corresponding ACS state number
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws InterruptedException
+   * @throws URISyntaxException if census API called with bad syntax
+   * @throws IOException if unable to connect to census API
+   * @throws InterruptedException if a thread is unexpectedly interrupted
    */
   public Map<String, String> queryStateNumbers()
       throws URISyntaxException, IOException, InterruptedException {
@@ -127,7 +127,7 @@ public class CensusHandler implements Route {
             .build();
     HttpResponse<String> stateNumsResponse =
         HttpClient.newBuilder().build().send(getStateNums, HttpResponse.BodyHandlers.ofString());
-    return CensusAPIUtilities.deserializeStates(stateNumsResponse.body());
+    return CensusApiUtilities.deserializeStates(stateNumsResponse.body());
   }
 
   /**
@@ -137,9 +137,9 @@ public class CensusHandler implements Route {
    *
    * @param state the String query representing the ACS state number of the State of interest
    * @return a Map of the county names (Strings) to their corresponding ACS county number
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws InterruptedException
+   * @throws URISyntaxException if census API called with bad syntax
+   * @throws IOException if unable to connect to census API
+   * @throws InterruptedException if a thread is unexpectedly interrupted
    */
   public Map<String, String> queryCountyNumbers(String state)
       throws URISyntaxException, IOException, InterruptedException {
@@ -153,6 +153,6 @@ public class CensusHandler implements Route {
             .build();
     HttpResponse<String> countyNumsResponse =
         HttpClient.newBuilder().build().send(getCountyNums, HttpResponse.BodyHandlers.ofString());
-    return CensusAPIUtilities.deserializeCounties(countyNumsResponse.body());
+    return CensusApiUtilities.deserializeCounties(countyNumsResponse.body());
   }
 }

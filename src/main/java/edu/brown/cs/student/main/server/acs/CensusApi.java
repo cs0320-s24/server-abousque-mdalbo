@@ -49,12 +49,12 @@ public class CensusApi implements AcsDatasource {
   /**
    * This function returns a counties broadband usage given the state code and county code.
    *
-   * @param state
-   * @param county
+   * @param state the ACS state code for the state to query
+   * @param county the ACS state code for the county to query in state
    * @return a String with the County Broadband usage
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws InterruptedException
+   * @throws URISyntaxException if census API called with bad syntax
+   * @throws IOException if unable to connect to census API
+   * @throws InterruptedException if a thread is unexpectedly interrupted
    */
   private String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
@@ -70,6 +70,6 @@ public class CensusApi implements AcsDatasource {
             .build();
     HttpResponse<String> countyInfoResponse =
         HttpClient.newBuilder().build().send(getCountyInfo, HttpResponse.BodyHandlers.ofString());
-    return CensusAPIUtilities.deserializeBroadband(countyInfoResponse.body());
+    return CensusApiUtilities.deserializeBroadband(countyInfoResponse.body());
   }
 }

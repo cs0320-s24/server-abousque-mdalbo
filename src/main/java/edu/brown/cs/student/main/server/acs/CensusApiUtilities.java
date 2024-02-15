@@ -11,10 +11,10 @@ import java.util.Map;
  * The censusAPIUtilities class provides useful utilities such as deserializing to deal with json
  * returns from the ACS govt API.
  */
-public class CensusAPIUtilities {
+public class CensusApiUtilities {
   /**
    * We can use this helper method for deserializing both county to numbers and state to numbers.
-   * Need to combine these to make it better code
+   * Need to combine these to make it better code.
    *
    * @param jsonStateNums the json representing the state to state number
    * @return A map from State name to state number
@@ -40,7 +40,7 @@ public class CensusAPIUtilities {
    * strings, and then looping through and putting the county, county number pairs into a map to be
    * returned.
    *
-   * @param jsonStateNums
+   * @param jsonStateNums pass in the json string that represents the counties to numbers
    * @return Map from county name to county number
    * @throws IOException to be caught by handler
    */
