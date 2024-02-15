@@ -27,19 +27,14 @@ public class CensusHandler implements Route {
    * Constructor for the CensusHandler class.
    *
    * @param acsDatasource the datasource to use to retrieve ACS data from
+   * @throws URISyntaxException if unexpected error in setup
+   * @throws IOException if unexpected error in setup
+   * @throws InterruptedException if unexpected error in setup
    */
-  public CensusHandler(AcsDatasource acsDatasource) {
-
+  public CensusHandler(AcsDatasource acsDatasource)
+      throws IOException, URISyntaxException, InterruptedException {
     this.datasource = new CachedAcsApi(acsDatasource, 200, 4);
-    try {
-      this.stateToNums = this.queryStateNumbers();
-    } catch (IOException e) {
-      System.out.println("boooo");
-    } catch (URISyntaxException e) {
-      System.out.println("syntax exception");
-    } catch (InterruptedException e) {
-      System.out.println("INTERRUPTION!");
-    }
+    this.stateToNums = this.queryStateNumbers();
   }
 
   /**
@@ -57,6 +52,7 @@ public class CensusHandler implements Route {
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, String.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     Map<String, Object> errorMap = new HashMap<>();
+    errorMap.put("endpoint", "broadband");
     String state = request.queryParams("state");
     if (state == null) {
       errorMap.put("result", "error_bad_request: make sure that you have a state parameter");
@@ -99,6 +95,7 @@ public class CensusHandler implements Route {
       return adapter.toJson(errorMap);
     }
     Map<String, Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
+    responseMap.put("endpoint", "broadband");
     responseMap.put("County", county);
     responseMap.put("State", state);
     if (responseMap.containsKey("result")) {

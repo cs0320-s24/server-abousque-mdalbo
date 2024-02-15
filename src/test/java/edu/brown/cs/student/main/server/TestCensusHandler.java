@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -11,6 +12,7 @@ import edu.brown.cs.student.main.server.acs.MockAcsApi;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +41,12 @@ public class TestCensusHandler {
     this.successfulResponse.put("date accessed", "time");
     this.successfulResponse.put("Broadband Use", "87.0");
     this.AcsAPI = new MockAcsApi(this.successfulResponse);
-    this.censusHandler = new CensusHandler(this.AcsAPI);
+    try {
+      this.censusHandler = new CensusHandler(this.AcsAPI);
+    } catch (IOException | URISyntaxException | InterruptedException e) {
+      System.err.println("Unexpected querying failure");
+      fail();
+    }
     Spark.get("/broadband", this.censusHandler);
     Spark.awaitInitialization();
     Moshi moshi = new Moshi.Builder().build();
@@ -56,9 +63,9 @@ public class TestCensusHandler {
   /**
    * Helper method to send a request to the server
    *
-   * @param apiCall
-   * @return
-   * @throws IOException
+   * @param apiCall the arguments to pass to the endpoint, following a "?"
+   * @return the connection for the given URL, just after connecting
+   * @throws IOException if unable to connect to Server
    */
   private HttpURLConnection tryRequest(String apiCall) throws IOException {
     // Configure the connection (but don't actually send a request yet)
@@ -76,7 +83,7 @@ public class TestCensusHandler {
   /**
    * Tests that a valid state and country has the correct output
    *
-   * @throws IOException
+   * @throws IOException if unable to connect to Server
    */
   @Test
   public void testValidStateAndCounty() throws IOException {
@@ -93,7 +100,7 @@ public class TestCensusHandler {
   /**
    * Integration test for when an invalid state is entered
    *
-   * @throws IOException
+   * @throws IOException if unable to connect to Server
    */
   @Test
   public void testInvalidState() throws IOException {
@@ -108,7 +115,7 @@ public class TestCensusHandler {
   /**
    * Tests what happens when the county entered is invalid
    *
-   * @throws IOException
+   * @throws IOException if unable to connect to Server
    */
   @Test
   public void testInvalidCounty() throws IOException {
@@ -123,7 +130,7 @@ public class TestCensusHandler {
   /**
    * This tests what happens when the state parameter isn't included correctly
    *
-   * @throws IOException
+   * @throws IOException if unable to connect to Server
    */
   @Test
   public void testIncorrectStateParameter() throws IOException {
@@ -139,7 +146,7 @@ public class TestCensusHandler {
   /**
    * Tests when the county parameter isn't included correctly
    *
-   * @throws IOException
+   * @throws IOException if unable to connect to Server
    */
   @Test
   public void testIncorrectCountyParameter() throws IOException {

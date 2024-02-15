@@ -9,6 +9,8 @@ import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
 import edu.brown.cs.student.main.server.csv.SearchCsvHandler;
 import edu.brown.cs.student.main.server.csv.ViewCsvHandler;
 import edu.brown.cs.student.main.server.csv.searching.Searcher;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import spark.Spark;
 
 /**
