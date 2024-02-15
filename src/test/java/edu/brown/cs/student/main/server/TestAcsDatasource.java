@@ -40,12 +40,15 @@ public class TestAcsDatasource {
     }
 
     /**
-     * Example of User Story 3. Caches max 20 results for 1 minute.
+     * Example of User Story 3. Caches max 12 results for 2 minutes.
      *
-     * @throws InterruptedException if
+     * Tests the cache storing system which employs a proxy censusApi.
+     * It should have the same date accessed time within the specified time of minutes kept, but it should
+     * be different when over that time limit.
+     * @throws InterruptedException
      */
     @Test
-    public void testCacheStoring1() throws InterruptedException {
+    public void testCacheStoring() throws InterruptedException {
         AcsDatasource ds = new CensusApi();
         AcsDatasource wrap = new CachedAcsApi(ds,20,1);
         Map<String,Object> firstQuery = wrap.queryBroadband("06","025");
