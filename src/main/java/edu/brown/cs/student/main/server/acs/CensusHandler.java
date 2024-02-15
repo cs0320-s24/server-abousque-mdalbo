@@ -24,6 +24,11 @@ public class CensusHandler implements Route {
   private Map<String, String> stateToNums;
   private final AcsDatasource datasource;
 
+  /**
+   * Constructor for the CensusHandler class.
+   *
+   * @param acsDatasource the datasource to use to retrieve ACS data from
+   */
   public CensusHandler(AcsDatasource acsDatasource) {
 
     this.datasource = new CachedAcsAPI(acsDatasource, 200, 4);
@@ -39,11 +44,12 @@ public class CensusHandler implements Route {
   }
 
   /**
-   * The handle method is called everytime a request is sent to broadband. It gets the state number, than county number
+   * The handle method is called every time a request is sent to broadband. It gets the state number, than county number
    * and finally looks up the broadband use.
-   * @param request
-   * @param response
-   * @return
+   *
+   * @param request the Request of the user
+   * @param response the Response to the request, unused in this implementation
+   * @return a serialized json describing the results of executing request
    */
   @Override
   public Object handle(Request request, Response response) {
@@ -108,7 +114,7 @@ public class CensusHandler implements Route {
    * The queryStateNumbers method is called in the CensusHandler constructor. It returns a map
    * between all the states and their corresponding numbers.
    *
-   * @return
+   * @return a Map from each state name to their corresponding ACS state number
    * @throws URISyntaxException
    * @throws IOException
    * @throws InterruptedException
@@ -130,8 +136,8 @@ public class CensusHandler implements Route {
    * the counties in that state. It returns a map of the county names to their corresponding
    * numbers.
    *
-   * @param state
-   * @return
+   * @param state the String query representing the ACS state number of the State of interest
+   * @return a Map of the county names (Strings) to their corresponding ACS county number
    * @throws URISyntaxException
    * @throws IOException
    * @throws InterruptedException
