@@ -43,8 +43,8 @@ public class CensusHandler implements Route {
   }
 
   /**
-   * The handle method is called every time a request is sent to broadband.
-   * It gets the state number, than county number and finally looks up the broadband use.
+   * The handle method is called every time a request is sent to broadband. It gets the state
+   * number, than county number and finally looks up the broadband use.
    *
    * @param request the Request of the user
    * @param response the Response to the request, unused in this implementation

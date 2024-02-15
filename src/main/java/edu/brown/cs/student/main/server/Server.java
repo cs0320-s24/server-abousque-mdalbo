@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.server;
 import static spark.Spark.after;
 
 import edu.brown.cs.student.main.server.acs.AcsDatasource;
-import edu.brown.cs.student.main.server.acs.CensusAPI;
+import edu.brown.cs.student.main.server.acs.CensusApi;
 import edu.brown.cs.student.main.server.acs.CensusHandler;
 import edu.brown.cs.student.main.server.csv.LoadCsvHandler;
 import edu.brown.cs.student.main.server.csv.SearchCsvHandler;
@@ -47,7 +47,7 @@ public class Server {
    * @param args unused
    */
   public static void main(String[] args) {
-    new Server(new CensusAPI());
+    new Server(new CensusApi());
     System.out.println("Server started at http://localhost:" + port);
     System.out.println(
         """

@@ -61,6 +61,7 @@ public class CsvParser<T> {
             "Unable to convert CSV line #" + currentRowIndex + " to expected row type.", ffExn.row);
       }
     }
+    this.reader.close();
     return parsed;
   }
 }

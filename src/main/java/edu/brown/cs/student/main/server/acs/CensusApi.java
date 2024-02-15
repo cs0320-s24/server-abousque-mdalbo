@@ -48,7 +48,7 @@ public class CensusApi implements AcsDatasource {
 
   /**
    * This function returns a counties broadband usage given the state code and county code.
-   * 
+   *
    * @param state
    * @param county
    * @return a String with the County Broadband usage
