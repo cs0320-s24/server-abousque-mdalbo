@@ -38,6 +38,13 @@ public class TestAcsDatasource {
         System.out.println(map);
         assertEquals(map.size(),1);
     }
+
+    /**
+     * Tests the cache storing system which employs a proxy censusApi.
+     * It should have the same date accessed time within the specified time of minutes kept, but it should
+     * be different when over that time limit.
+     * @throws InterruptedException
+     */
     @Test
     public void testCacheStoring() throws InterruptedException {
         AcsDatasource ds = new CensusAPI();
