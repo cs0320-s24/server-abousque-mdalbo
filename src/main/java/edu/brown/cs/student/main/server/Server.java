@@ -33,8 +33,12 @@ public class Server {
           response.header("Access-Control-Allow-Origin", "*");
           response.header("Access-Control-Allow-Methods", "*");
         });
-
-    Spark.get("/broadband", new CensusHandler(acsDatasource));
+    try {
+      Spark.get("/broadband", new CensusHandler(acsDatasource));
+    } catch (IOException | URISyntaxException | InterruptedException e) {
+      System.err.println("Unexpected querying failure");
+      return;
+    }
     Spark.get("/loadcsv", new LoadCsvHandler(csvSearcher));
     Spark.get("/viewcsv", new ViewCsvHandler(csvSearcher));
     Spark.get("/searchcsv", new SearchCsvHandler(csvSearcher));
