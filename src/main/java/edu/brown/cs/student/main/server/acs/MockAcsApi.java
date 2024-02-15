@@ -1,16 +1,20 @@
 package edu.brown.cs.student.main.server.acs;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * MockAcsApi is used to mimic the behaviour of the regular Census APis, but without actually
- * sending requests.
+ * MockAcsApi is used to mimic the behaviour of the regular Census APis,
+ * but without actually sending requests.
  */
-public class MockAcsAPI implements AcsDatasource {
-
+public class MockAcsApi implements AcsDatasource {
   private Map<String, Object> toReturn;
-  public MockAcsAPI(Map<String, Object> toReturn) {
+
+  /**
+   * Constructor for the MockAcsApi class.
+   *
+   * @param toReturn the appropriate query result to return in mocked API responses
+   */
+  public MockAcsApi(Map<String, Object> toReturn) {
     this.toReturn = toReturn;
   }
 

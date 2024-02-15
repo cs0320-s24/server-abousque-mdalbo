@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * A proxy class wrapping an AcsDatasource in a cache. This should be used for querying the Census
  * (ACS) API with configurable cache.
  */
-public class CachedAcsAPI implements AcsDatasource {
+public class CachedAcsApi implements AcsDatasource {
 
   private final AcsDatasource wrappedApi;
   private final LoadingCache<String, Map<String, Object>> cache;
@@ -22,7 +22,7 @@ public class CachedAcsAPI implements AcsDatasource {
    * @param maxSize the maximum number of queries that should be kept in the cache at a time
    * @param minutesKept the maximum time in minutes that a query should be kept in the cache
    */
-  public CachedAcsAPI(AcsDatasource toWrap, int maxSize, int minutesKept) {
+  public CachedAcsApi(AcsDatasource toWrap, int maxSize, int minutesKept) {
     this.wrappedApi = toWrap;
     this.cache =
         CacheBuilder.newBuilder()
@@ -43,8 +43,6 @@ public class CachedAcsAPI implements AcsDatasource {
                     String[] codesList = codes.split(",");
                     String countyCode = codesList[0];
                     String stateCode = codesList[1];
-                    System.out.println(
-                        "called load for: county #" + countyCode + " under state #" + stateCode);
                     // If this isn't yet present in the cache, load it:
                     return wrappedApi.queryBroadband(stateCode, countyCode);
                   }
@@ -60,9 +58,6 @@ public class CachedAcsAPI implements AcsDatasource {
    */
   public Map<String, Object> queryBroadband(String stateCode, String countyCode) {
     Map<String, Object> result = cache.getUnchecked(countyCode + "," + stateCode);
-
-    // TODO: remove print before submitting
-    System.out.println(cache.stats());
     return result;
   }
 }

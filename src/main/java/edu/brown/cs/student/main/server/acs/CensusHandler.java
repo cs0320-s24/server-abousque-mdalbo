@@ -1,5 +1,8 @@
 package edu.brown.cs.student.main.server.acs;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -11,9 +14,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -30,7 +30,7 @@ public class CensusHandler implements Route {
    */
   public CensusHandler(AcsDatasource acsDatasource) {
 
-    this.datasource = new CachedAcsAPI(acsDatasource, 200, 4);
+    this.datasource = new CachedAcsApi(acsDatasource, 200, 4);
     try {
       this.stateToNums = this.queryStateNumbers();
     } catch (IOException e) {
@@ -43,8 +43,8 @@ public class CensusHandler implements Route {
   }
 
   /**
-   * The handle method is called every time a request is sent to broadband. It gets the
-   * state number, than county number and finally looks up the broadband use.
+   * The handle method is called every time a request is sent to broadband.
+   * It gets the state number, than county number and finally looks up the broadband use.
    *
    * @param request the Request of the user
    * @param response the Response to the request, unused in this implementation
@@ -114,9 +114,9 @@ public class CensusHandler implements Route {
    * between all the states and their corresponding numbers.
    *
    * @return a Map from each state name to their corresponding ACS state number
-   * @throws URISyntaxException throws exception to be caught in handle method
-   * @throws IOException throws exception to be caught in handle method
-   * @throws InterruptedException throws exception to be caught in handle method
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
    */
   public Map<String, String> queryStateNumbers()
       throws URISyntaxException, IOException, InterruptedException {
@@ -137,9 +137,9 @@ public class CensusHandler implements Route {
    *
    * @param state the String query representing the ACS state number of the State of interest
    * @return a Map of the county names (Strings) to their corresponding ACS county number
-   * @throws URISyntaxException throws exception to be caught in handle method
-   * @throws IOException throws exception to be caught in handle method
-   * @throws InterruptedException throws exception to be caught in handle method
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
    */
   public Map<String, String> queryCountyNumbers(String state)
       throws URISyntaxException, IOException, InterruptedException {

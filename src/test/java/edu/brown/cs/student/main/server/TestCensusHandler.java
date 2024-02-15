@@ -5,7 +5,7 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.server.acs.AcsDatasource;
 import edu.brown.cs.student.main.server.acs.CensusHandler;
-import edu.brown.cs.student.main.server.acs.MockAcsAPI;
+import edu.brown.cs.student.main.server.acs.MockAcsApi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,11 +37,11 @@ public class TestCensusHandler {
      * Sets up the server and passes in the mocked api before each test
      */
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.successfulResponse = new HashMap<>();
         this.successfulResponse.put("date accessed", "time");
         this.successfulResponse.put("Broadband Use", "87.0");
-        this.AcsAPI = new MockAcsAPI(this.successfulResponse);
+        this.AcsAPI = new MockAcsApi(this.successfulResponse);
         this.censusHandler = new CensusHandler(this.AcsAPI);
         Spark.get("/broadband",this.censusHandler);
         Spark.awaitInitialization();
@@ -53,7 +53,7 @@ public class TestCensusHandler {
      * Breaks down the server after each test
      */
     @AfterEach
-    private void tearDown() {
+    public void tearDown() {
         Spark.unmap("/broadband");
         Spark.awaitStop();
     }

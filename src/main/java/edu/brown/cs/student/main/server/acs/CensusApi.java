@@ -15,7 +15,7 @@ import java.util.Map;
  * A class to query the Census (ACS) API. This should be used for querying the Census (ACS) API when
  * no caching of results is desired.
  */
-public class CensusAPI implements AcsDatasource {
+public class CensusApi implements AcsDatasource {
 
   /**
    * Queries the ACS broadband data for a specific state and county.
@@ -48,13 +48,13 @@ public class CensusAPI implements AcsDatasource {
 
   /**
    * This function returns a counties broadband usage given the state code and county code.
-   *
-   * @param state a string representing the state number
-   * @param county a county number
+   * 
+   * @param state
+   * @param county
    * @return a String with the County Broadband usage
-   * @throws URISyntaxException exception to be caught in handle
-   * @throws IOException exception to be caught in handle
-   * @throws InterruptedException exception to be caught in handle
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
    */
   private String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {
