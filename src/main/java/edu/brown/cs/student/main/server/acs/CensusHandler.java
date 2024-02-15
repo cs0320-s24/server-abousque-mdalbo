@@ -1,5 +1,8 @@
 package edu.brown.cs.student.main.server.acs;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -11,10 +14,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -31,7 +30,7 @@ public class CensusHandler implements Route {
    */
   public CensusHandler(AcsDatasource acsDatasource) {
 
-    this.datasource = new CachedAcsAPI(acsDatasource, 200, 4);
+    this.datasource = new CachedAcsApi(acsDatasource, 200, 4);
     try {
       this.stateToNums = this.queryStateNumbers();
     } catch (IOException e) {
@@ -44,8 +43,8 @@ public class CensusHandler implements Route {
   }
 
   /**
-   * The handle method is called every time a request is sent to broadband. It gets the state number, than county number
-   * and finally looks up the broadband use.
+   * The handle method is called every time a request is sent to broadband.
+   * It gets the state number, than county number and finally looks up the broadband use.
    *
    * @param request the Request of the user
    * @param response the Response to the request, unused in this implementation
@@ -55,9 +54,9 @@ public class CensusHandler implements Route {
   public Object handle(Request request, Response response) {
     // link to get all state codes:https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
     Moshi moshi = new Moshi.Builder().build();
-    Type mapStringObject = Types.newParameterizedType(Map.class,String.class,String.class);
+    Type mapStringObject = Types.newParameterizedType(Map.class, String.class, String.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
-    Map<String,Object> errorMap = new HashMap<>();
+    Map<String, Object> errorMap = new HashMap<>();
     String state = request.queryParams("state");
     if (state == null) {
       errorMap.put("result", "error_bad_request: make sure that you have a state parameter");
@@ -69,18 +68,18 @@ public class CensusHandler implements Route {
       errorMap.put("result", "error_bad_request");
       return adapter.toJson(errorMap);
     }
-    Map<String,String> countyToInt;
+    Map<String, String> countyToInt;
     String stateCode = this.stateToNums.get(state);
     try {
       countyToInt = this.queryCountyNumbers(stateCode);
     } catch (IOException e) {
-      errorMap.put("result","error_datasource");
+      errorMap.put("result", "error_datasource");
       return adapter.toJson(errorMap);
     } catch (URISyntaxException e) {
-      errorMap.put("result","error_bad_request");
+      errorMap.put("result", "error_bad_request");
       return adapter.toJson(errorMap);
     } catch (InterruptedException e) {
-      errorMap.put("result","error_datasource");
+      errorMap.put("result", "error_datasource");
       return adapter.toJson(errorMap);
     }
     String county = request.queryParams("county");
@@ -99,7 +98,7 @@ public class CensusHandler implements Route {
       errorMap.put("result", "error_datasource");
       return adapter.toJson(errorMap);
     }
-    Map<String,Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
+    Map<String, Object> responseMap = this.datasource.queryBroadband(stateCode, countyCode);
     responseMap.put("County", county);
     responseMap.put("State", state);
     if (responseMap.containsKey("result")) {
