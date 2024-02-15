@@ -32,26 +32,29 @@ public class CensusAPIUtilities {
   }
 
   /**
-   * Helper function to deserialize counties by using an adapter to convert into a list of list of strings, and then
-   * looping through and putting the county, county number pairs into a map to be returned.
+   * Helper function to deserialize counties by using an adapter to convert into a list of list of
+   * strings, and then looping through and putting the county, county number pairs into a map to be
+   * returned.
+   *
    * @param jsonStateNums
    * @return
    * @throws IOException
    */
-  public static Map<String, String> deserializeCounties(String jsonStateNums) throws IOException{
-      Moshi moshi = new Moshi.Builder().build();
-      JsonAdapter<List> adapter = moshi.adapter(List.class);
-      List<List<String>> statesToNums = adapter.fromJson(jsonStateNums);
-      Map<String, String> map = new HashMap();
-      for (int i = 1; i < statesToNums.size(); i++) {
-        map.put(statesToNums.get(i).get(0), statesToNums.get(i).get(2));
-      }
-      return map;
+  public static Map<String, String> deserializeCounties(String jsonStateNums) throws IOException {
+    Moshi moshi = new Moshi.Builder().build();
+    JsonAdapter<List> adapter = moshi.adapter(List.class);
+    List<List<String>> statesToNums = adapter.fromJson(jsonStateNums);
+    Map<String, String> map = new HashMap();
+    for (int i = 1; i < statesToNums.size(); i++) {
+      map.put(statesToNums.get(i).get(0), statesToNums.get(i).get(2));
+    }
+    return map;
   }
 
   /**
-   * The deserialize broadband helper method is used to take a json file and get the broadband use. It returns an empty
-   * string if there is an error deserializing.
+   * The deserialize broadband helper method is used to take a json file and get the broadband use.
+   * It returns an empty string if there is an error deserializing.
+   *
    * @param jsonCountyInfo
    * @return
    */

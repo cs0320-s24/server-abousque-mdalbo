@@ -3,8 +3,8 @@ package edu.brown.cs.student.main.server.acs;
 import java.util.Map;
 
 /**
- * MockAcsApi is used to mimic the behaviour of the regular Census APis,
- * but without actually sending requests.
+ * MockAcsApi is used to mimic the behaviour of the regular Census APis, but without actually
+ * sending requests.
  */
 public class MockAcsApi implements AcsDatasource {
   private Map<String, Object> toReturn;
