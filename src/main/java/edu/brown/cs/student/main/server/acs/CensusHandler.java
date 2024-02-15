@@ -54,8 +54,9 @@ public class CensusHandler implements Route {
     Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("endpoint", "broadband");
     String state = request.queryParams("state");
+    errorMap.put("state", state);
     if (state == null) {
-      errorMap.put("result", "error_bad_request: make sure that you have a state parameter");
+      errorMap.put("result", "error_bad_request: Make sure that you have a state parameter.");
       return adapter.toJson(errorMap);
     }
     try {
@@ -79,8 +80,9 @@ public class CensusHandler implements Route {
       return adapter.toJson(errorMap);
     }
     String county = request.queryParams("county");
+    errorMap.put("county", county);
     if (county == null) {
-      errorMap.put("result", "error_bad_request: make sure to have a county parameter");
+      errorMap.put("result", "error_bad_request: Make sure to have a county parameter.");
       return adapter.toJson(errorMap);
     }
     try {
