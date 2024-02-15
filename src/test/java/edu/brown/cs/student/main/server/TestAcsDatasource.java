@@ -1,11 +1,12 @@
 package edu.brown.cs.student.main.server;
 
 import edu.brown.cs.student.main.server.acs.AcsDatasource;
+import edu.brown.cs.student.main.server.acs.CachedAcsAPI;
 import edu.brown.cs.student.main.server.acs.CensusAPI;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.AssertJUnit.assertFalse;
 
 import java.util.Map;
 
@@ -36,5 +37,20 @@ public class TestAcsDatasource {
         Map<String,Object> map = ds.queryBroadband("06","021");
         System.out.println(map);
         assertEquals(map.size(),1);
+    }
+    @Test
+    public void testCacheStoring() throws InterruptedException {
+        AcsDatasource ds = new CensusAPI();
+        AcsDatasource wrap = new CachedAcsAPI(ds,20,1);
+        Map<String,Object> firstQuery = wrap.queryBroadband("06","025");
+        System.out.println(firstQuery);
+        Thread.sleep(500);
+        Map<String, Object> secondQuery = wrap.queryBroadband("06","025");
+        System.out.println(secondQuery);
+        assertEquals(firstQuery,secondQuery);
+        Thread.sleep(70000);
+        Map<String,Object> queryAfterLongPause = wrap.queryBroadband("06","025");
+        System.out.println(queryAfterLongPause);
+        assertFalse(queryAfterLongPause.equals(firstQuery));
     }
 }
