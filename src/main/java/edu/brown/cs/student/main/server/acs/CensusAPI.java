@@ -33,6 +33,11 @@ public class CensusAPI implements AcsDatasource {
       errorMap.put("result", "error_datasource: no available data for that county");
       return errorMap;
     }
+    if (stats.equals("")) {
+      Map<String,Object > errorMap = new HashMap<>();
+      errorMap.put("result", "error_datasource: no available data for that county");
+      return errorMap;
+    }
     Map<String, Object> responseMap = new HashMap<>();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
     LocalDateTime now = LocalDateTime.now();
@@ -42,6 +47,7 @@ public class CensusAPI implements AcsDatasource {
   }
 
   /**
+   * This function returns a counties broadband usage given the state code and county code
    * @param state
    * @param county
    * @return a String with the County Broadband usage

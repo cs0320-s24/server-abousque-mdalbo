@@ -23,6 +23,7 @@ import java.util.Map;
 
 /**
  * A class for testing functionality of CensusHandler class and possible inputs
+ * These are integration tests that test the whole functionality of broadband.
  */
 public class TestCensusHandler {
     private CensusHandler censusHandler;
@@ -31,6 +32,10 @@ public class TestCensusHandler {
     private JsonAdapter<Map<String,String>> adapter;
     private final Type mapStringObject =
             Types.newParameterizedType(Map.class, String.class, String.class);
+
+    /**
+     * Sets up the server and passes in the mocked api before each test
+     */
     @BeforeEach
     private void setup() {
         this.successfulResponse = new HashMap<>();
@@ -43,11 +48,22 @@ public class TestCensusHandler {
         Moshi moshi = new Moshi.Builder().build();
         this.adapter = moshi.adapter(mapStringObject);
     }
+
+    /**
+     * Breaks down the server after each test
+     */
     @AfterEach
     private void tearDown() {
         Spark.unmap("/broadband");
         Spark.awaitStop();
     }
+
+    /**
+     * Helper method to send a request to the server
+     * @param apiCall
+     * @return
+     * @throws IOException
+     */
     private HttpURLConnection tryRequest(String apiCall) throws IOException {
         // Configure the connection (but don't actually send a request yet)
         URL requestURL = new URL("http://localhost:"+Spark.port()+"/broadband?"+apiCall);
@@ -76,6 +92,11 @@ public class TestCensusHandler {
         assertEquals(responseBody.get("Broadband Use"),"87.0");
         assertEquals(responseBody.get("State"),"California");
     }
+
+    /**
+     * Integration test for when an invalid state is entered
+     * @throws IOException
+     */
     @Test
     public void testInvalidState() throws IOException{
         HttpURLConnection connection = tryRequest("state=Mexico&county=Yolo+County");
@@ -85,6 +106,11 @@ public class TestCensusHandler {
         assertEquals(responseBody.size(),1);
         assertEquals(responseBody.get("result"),"error_datasource");
     }
+
+    /**
+     * Tests what happens when the county entered is invalid
+     * @throws IOException
+     */
     @Test
     public void testInvalidCounty() throws IOException{
         HttpURLConnection connection = tryRequest("state=California&county=Yo+Mama");
@@ -94,6 +120,11 @@ public class TestCensusHandler {
         assertEquals(responseBody.size(),1);
         assertEquals(responseBody.get("result"),"error_datasource");
     }
+
+    /**
+     * This tests what happens when the state parameter isn't included correctly
+     * @throws IOException
+     */
     @Test
     public void testIncorrectStateParameter() throws IOException {
         HttpURLConnection connection = tryRequest("sates=California&county=Yo+Mama");
@@ -103,6 +134,11 @@ public class TestCensusHandler {
         assertEquals(responseBody.size(),1);
         assertEquals(responseBody.get("result"),"error_bad_request: make sure that you have a state parameter");
     }
+
+    /**
+     * Tests when the county parameter isn't included correctly
+     * @throws IOException
+     */
     @Test
     public void testIncorrectCountyParameter() throws IOException {
         HttpURLConnection connection = tryRequest("state=California&countly=Yo+Mama");
