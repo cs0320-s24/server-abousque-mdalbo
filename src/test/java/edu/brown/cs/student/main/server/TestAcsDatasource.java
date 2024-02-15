@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
  * usage or the data isn't stored. I test each outcome.
  */
 public class TestAcsDatasource {
-  /** Tests what happens when the inputted county and state are valid */
+  /** Tests what happens when the inputted county and state are valid. */
   @Test
   public void testValidCountyAndState() {
     AcsDatasource ds = new CensusApi();
@@ -26,7 +26,7 @@ public class TestAcsDatasource {
     assertEquals(map.get("Broadband Use"), "87.8");
   }
 
-  /** Tests when there is no available data for a county */
+  /** Tests when there is no available data for a county. */
   @Test
   public void testNoAvailableData() {
     AcsDatasource ds = new CensusApi();
@@ -42,7 +42,7 @@ public class TestAcsDatasource {
    * accessed time within the specified time of minutes kept, but it should be different when over
    * that time limit.
    *
-   * @throws InterruptedException
+   * @throws InterruptedException if a thread is unexpectedly interrupted
    */
   @Test
   public void testCacheStoring() throws InterruptedException {
@@ -62,6 +62,10 @@ public class TestAcsDatasource {
 
   /**
    * Example of User Story 3. Caches max 12 results for 2 minutes.
+   *
+   * <p>Tests the cache storing system which employs a proxy censusApi. It should have the same date
+   * accessed time within the specified time of minutes kept, but it should be different when over
+   * that time limit.
    *
    * @throws InterruptedException if a thread is unexpectedly interrupted
    */
