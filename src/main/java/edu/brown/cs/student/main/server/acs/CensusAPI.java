@@ -42,8 +42,10 @@ public class CensusAPI implements AcsDatasource {
   }
 
   /**
-   * @param state
-   * @param county
+   * Queries the percentage broadband usage for a specific state and county in the US.
+   *
+   * @param state the ACS state code for the state of interest
+   * @param county the ACS county code for the county of interest in state
    * @return a String with the County Broadband usage
    * @throws URISyntaxException
    * @throws IOException
