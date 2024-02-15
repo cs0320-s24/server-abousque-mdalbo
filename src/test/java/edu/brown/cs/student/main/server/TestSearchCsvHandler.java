@@ -148,11 +148,9 @@ public class TestSearchCsvHandler {
     Map<String, Object> viewResponseBody =
         adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_json", viewResponseBody.get("result"));
     assertEquals(
-        "Attempted to searchcsv before loading in a csv with loadcsv.",
-        viewResponseBody.get("error message"));
-
+        "error_bad_json: Attempted to searchcsv before loading in a csv with loadcsv.",
+        viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
   }
 
@@ -171,7 +169,9 @@ public class TestSearchCsvHandler {
     Map<String, Object> viewResponseBody =
         adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Search passed a null target. Please try again with non-null target.",
+        viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
   }
 
@@ -192,7 +192,9 @@ public class TestSearchCsvHandler {
     Map<String, Object> viewResponseBody =
         adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    assertEquals(
+        "error_bad_request: User provided column name racemisnamed which is not present in file. Columns available are: [slug geography, race, year, geography, household income by race, id year, id geography, id race, household income by race moe]",
+        viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
 
     // column index out of bounds
@@ -201,7 +203,9 @@ public class TestSearchCsvHandler {
 
     viewResponseBody = adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    assertEquals(
+        "error_bad_request: User provided column index -2, but indices only range from 0 to 8.",
+        viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
 
     searchConnection = tryRequestSearchCsv("target=14559&columnOfInterest=10");
@@ -209,7 +213,9 @@ public class TestSearchCsvHandler {
 
     viewResponseBody = adapter.fromJson(new Buffer().readFrom(searchConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_request", viewResponseBody.get("result"));
+    assertEquals(
+        "error_bad_request: User provided column index 10, but indices only range from 0 to 8.",
+        viewResponseBody.get("result"));
     searchConnection.disconnect(); // close gracefully
   }
 

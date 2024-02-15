@@ -130,10 +130,9 @@ public class TestViewCsvHandler {
     Map<String, Object> viewResponseBody =
         adapter.fromJson(new Buffer().readFrom(viewConnection.getInputStream()));
     showDetailsIfError(viewResponseBody);
-    assertEquals("error_bad_json", viewResponseBody.get("result"));
     assertEquals(
-        "Attempted to viewcsv before loading in a csv with loadcsv.",
-        viewResponseBody.get("error message"));
+        "error_bad_json: Attempted to viewcsv before loading in a csv with loadcsv.",
+        viewResponseBody.get("result"));
 
     viewConnection.disconnect(); // close gracefully
   }

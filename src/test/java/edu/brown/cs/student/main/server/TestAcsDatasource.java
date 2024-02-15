@@ -31,7 +31,6 @@ public class TestAcsDatasource {
   public void testNoAvailableData() {
     AcsDatasource ds = new CensusApi();
     Map<String, Object> map = ds.queryBroadband("06", "021");
-    System.out.println(map);
     assertEquals(map.size(), 1);
   }
 

@@ -123,7 +123,7 @@ public class TestCensusHandler {
     assertEquals(200, connection.getResponseCode());
     Map<String, String> responseBody =
         this.adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
-    assertEquals(responseBody.size(), 1);
+    assertEquals(responseBody.size(), 4);
     assertEquals(responseBody.get("result"), "error_datasource");
   }
 
@@ -138,7 +138,7 @@ public class TestCensusHandler {
     assertEquals(200, connection.getResponseCode());
     Map<String, String> responseBody =
         this.adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
-    assertEquals(responseBody.size(), 1);
+    assertEquals(responseBody.size(), 2);
     assertEquals(
         responseBody.get("result"), "error_bad_request: make sure that you have a state parameter");
   }
@@ -154,7 +154,7 @@ public class TestCensusHandler {
     assertEquals(200, connection.getResponseCode());
     Map<String, String> responseBody =
         this.adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
-    assertEquals(responseBody.size(), 1);
+    assertEquals(responseBody.size(), 3);
     assertEquals(
         responseBody.get("result"), "error_bad_request: make sure to have a county parameter");
   }

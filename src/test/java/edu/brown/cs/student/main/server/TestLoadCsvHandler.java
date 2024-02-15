@@ -92,7 +92,9 @@ public class TestLoadCsvHandler {
     Map<String, Object> responseBody =
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Required argument headersIncluded is missing.",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals(null, responseBody.get("filepath"));
     assertEquals(null, responseBody.get("headersIncluded"));
@@ -104,7 +106,9 @@ public class TestLoadCsvHandler {
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Required argument headersIncluded is missing.",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals("RI_City_Town.csv", responseBody.get("filepath"));
     assertEquals(null, responseBody.get("headersIncluded"));
@@ -116,7 +120,9 @@ public class TestLoadCsvHandler {
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Invalid empty CSV path. Please try again with a valid path from ./data/",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals(null, responseBody.get("filepath"));
     assertEquals("false", responseBody.get("headersIncluded"));
@@ -138,7 +144,9 @@ public class TestLoadCsvHandler {
     Map<String, Object> responseBody =
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_datasource", responseBody.get("result"));
+    assertEquals(
+        "error_datasource: Invalid CSV path. Please try again with a valid path from ./data/",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals("nonexistent.csv", responseBody.get("filepath"));
     assertEquals("true", responseBody.get("headersIncluded"));
@@ -150,7 +158,9 @@ public class TestLoadCsvHandler {
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Illegal attempt to exit secure data directory.",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals("../out_of_scope.csv", responseBody.get("filepath"));
     assertEquals("true", responseBody.get("headersIncluded"));
@@ -173,7 +183,9 @@ public class TestLoadCsvHandler {
     Map<String, Object> responseBody =
         adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: Encountered row with length inconsistent to expected length 5 based on first row of CSV: [this, one, three]",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals("inconsistent_row_lengths.csv", responseBody.get("filepath"));
     assertEquals("false", responseBody.get("headersIncluded"));
@@ -185,7 +197,9 @@ public class TestLoadCsvHandler {
 
     responseBody = adapter.fromJson(new Buffer().readFrom(connection.getInputStream()));
     showDetailsIfError(responseBody);
-    assertEquals("error_bad_request", responseBody.get("result"));
+    assertEquals(
+        "error_bad_request: User provided empty file. File must be non-empty.",
+        responseBody.get("result"));
     assertEquals("loadcsv", responseBody.get("endpoint"));
     assertEquals("empty.csv", responseBody.get("filepath"));
     assertEquals("true", responseBody.get("headersIncluded"));
