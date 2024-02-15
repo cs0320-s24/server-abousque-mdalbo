@@ -29,12 +29,12 @@ public class CensusAPI implements AcsDatasource {
     try {
       stats = queryCountyStats(stateCode, countyCode);
     } catch (Exception e) {
-      Map<String,Object > errorMap = new HashMap<>();
+      Map<String, Object> errorMap = new HashMap<>();
       errorMap.put("result", "error_datasource: no available data for that county");
       return errorMap;
     }
     if (stats.equals("")) {
-      Map<String,Object > errorMap = new HashMap<>();
+      Map<String, Object> errorMap = new HashMap<>();
       errorMap.put("result", "error_datasource: no available data for that county");
       return errorMap;
     }
@@ -47,13 +47,14 @@ public class CensusAPI implements AcsDatasource {
   }
 
   /**
-   * This function returns a counties broadband usage given the state code and county code
-   * @param state
-   * @param county
+   * This function returns a counties broadband usage given the state code and county code.
+   *
+   * @param state a string representing the state number
+   * @param county a county number
    * @return a String with the County Broadband usage
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws InterruptedException
+   * @throws URISyntaxException exception to be caught in handle
+   * @throws IOException exception to be caught in handle
+   * @throws InterruptedException exception to be caught in handle
    */
   private String queryCountyStats(String state, String county)
       throws URISyntaxException, IOException, InterruptedException {

@@ -11,7 +11,7 @@ import static org.testng.AssertJUnit.assertFalse;
 import java.util.Map;
 
 /**
- * These tests are unit tests for some of the needed functionality fo the APIDatasource. There are two different results
+ * These tests are unit tests for some of the needed functionality of the APIDatasource. There are two different results
  * that can happen from inputting the county and state, given we've already verified that the county is in the state and
  * has a number: either we have the broadband data usage or the data isn't stored. I test each outcome.
  */

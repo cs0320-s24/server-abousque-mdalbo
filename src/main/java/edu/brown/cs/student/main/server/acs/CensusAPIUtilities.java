@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The censusAPIUtilities class provides useful utilities such as deserializing to deal with json
+ * returns from the ACS govt API.
+ */
 public class CensusAPIUtilities {
   /**
    * We can use this helper method for deserializing both county to numbers and state to numbers.
    * Need to combine these to make it better code
    *
-   * @param jsonStateNums
-   * @return
+   * @param jsonStateNums the json representing the state to state number
+   * @return A map from State name to state number
    */
   public static Map<String, String> deserializeStates(String jsonStateNums) {
     try {
@@ -35,8 +39,8 @@ public class CensusAPIUtilities {
    * Helper function to deserialize counties by using an adapter to convert into a list of list of strings, and then
    * looping through and putting the county, county number pairs into a map to be returned.
    * @param jsonStateNums
-   * @return
-   * @throws IOException
+   * @return Map from county name to county number
+   * @throws IOException to be caught by handler
    */
   public static Map<String, String> deserializeCounties(String jsonStateNums) throws IOException{
       Moshi moshi = new Moshi.Builder().build();
